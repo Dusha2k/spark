@@ -5,12 +5,14 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
-import { MainLayout, theme } from '../src';
+import 'nprogress/nprogress.css';
+import { MainLayout, theme, useNProgress } from '../src';
 import '../src/app/styles/global.css';
 import { useState } from 'react';
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps, router }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
+  useNProgress(router);
 
   return (
     <ChakraProvider theme={theme}>
