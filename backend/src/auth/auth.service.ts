@@ -1,26 +1,50 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
+import { UserEntity } from './entities/user.entity';
+import { genSalt, hash, compare } from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  constructor(
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+  ) {}
+  async register({ email, login, password }: RegisterDto) {
+    const salt = await genSalt(10);
+    return this.userRepository.save({
+      email,
+      login,
+      passwordHash: await hash(password, salt),
+    });
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  async login({ email, password }: LoginDto) {
+    const user = await this.findOne(email);
+    if (!user) {
+      throw new NotFoundException('Пользователь не найден');
+    }
+
+    const isCorrectPassword = await compare(password, user.passwordHash);
+    if (!isCorrectPassword) {
+      throw new UnauthorizedException('Не правильный логин или пароль');
+    }
+
+    const { passwordHash, ...data } = user;
+    return data;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  findOne(email: string) {
+    return this.userRepository.findOne({
+      where: {
+        email,
+      },
+    });
   }
 }
