@@ -9,5 +9,5 @@ export class UserEntity {
   @Column()
   email: string;
   @Column()
-  passwordHash: string;
+  password: string;
 }
