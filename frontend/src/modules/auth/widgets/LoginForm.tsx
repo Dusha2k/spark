@@ -1,18 +1,17 @@
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { loginSchema } from './lib';
-import * as yup from 'yup';
 import {
-  Box,
-  Button,
   Flex,
   FormControl,
-  FormHelperText,
   FormLabel,
   Input,
-  InputGroup,
+  FormHelperText,
   Text,
+  Button,
 } from '@chakra-ui/react';
+import { useForm } from 'react-hook-form';
+import { loginSchema } from '../helpers/schemas';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { AuthCard } from '../components/AuthCard';
 
 type FormData = yup.InferType<typeof loginSchema>;
 export const LoginForm = () => {
@@ -24,12 +23,8 @@ export const LoginForm = () => {
     resolver: yupResolver(loginSchema),
   });
   const onSubmit = (data: FormData) => console.log(data);
-
   return (
-    <Flex direction="column">
-      <Text marginBottom={2} fontSize="2xl" align="center">
-        Вход
-      </Text>
+    <AuthCard title="Вход">
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormControl isRequired isInvalid={!!errors.login?.message}>
           <FormLabel>Введите свой логин</FormLabel>
@@ -51,6 +46,6 @@ export const LoginForm = () => {
           </Button>
         </Flex>
       </form>
-    </Flex>
+    </AuthCard>
   );
 };

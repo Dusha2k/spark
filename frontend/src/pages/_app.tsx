@@ -1,14 +1,10 @@
+import { useNProgress } from '@/configs';
+import '@/styles/globals.css';
+import { ChakraProvider, theme } from '@chakra-ui/react';
 import type { AppProps } from 'next/app';
-import { ChakraProvider } from '@chakra-ui/react';
-import {
-  Hydrate,
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query';
-import 'nprogress/nprogress.css';
-import { MainLayout, theme, useNProgress } from '../src';
-import '../src/app/styles/global.css';
+import router from 'next/router';
 import { useState } from 'react';
+import { QueryClient, QueryClientProvider, Hydrate } from 'react-query';
 
 export default function App({ Component, pageProps, router }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
@@ -18,9 +14,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
     <ChakraProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
-          <MainLayout>
-            <Component {...pageProps} />
-          </MainLayout>
+          <Component {...pageProps} />
         </Hydrate>
       </QueryClientProvider>
     </ChakraProvider>

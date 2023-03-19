@@ -1,6 +1,5 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { registerSchema } from './lib';
 import * as yup from 'yup';
 import {
   Button,
@@ -12,6 +11,8 @@ import {
   InputGroup,
   Text,
 } from '@chakra-ui/react';
+import { registerSchema } from '../helpers/schemas';
+import { AuthCard } from '../components/AuthCard';
 
 type FormData = yup.InferType<typeof registerSchema>;
 export const RegisterForm = () => {
@@ -25,10 +26,7 @@ export const RegisterForm = () => {
   const onSubmit = (data: FormData) => console.log(data);
 
   return (
-    <Flex direction="column">
-      <Text marginBottom={2} fontSize="2xl" align="center">
-        Вход
-      </Text>
+    <AuthCard title="Зарегистрироваться">
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormControl isRequired isInvalid={!!errors.login?.message}>
           <FormLabel>Введите свой логин</FormLabel>
@@ -69,6 +67,6 @@ export const RegisterForm = () => {
           </Button>
         </Flex>
       </form>
-    </Flex>
+    </AuthCard>
   );
 };

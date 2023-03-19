@@ -1,27 +1,17 @@
-import { RegisterForm } from '@/features/register-form';
-import { Flex, Button, Icon, Box } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
-import { AiOutlineArrowLeft } from 'react-icons/ai';
+import { RegisterForm } from '@/modules/auth';
+import { Container } from '@chakra-ui/react';
 
-export const RegisterPage = () => {
-  const router = useRouter();
+export default function Register() {
   return (
-    <Flex
-      width="100%"
-      height="100%"
+    <Container
+      display="flex"
       justifyContent="center"
       alignItems="center"
+      flexDirection="column"
+      gap={2}
+      height="100%"
     >
-      <Box boxShadow="2xl" p="10" rounded="md" width="100%">
-        <Button
-          onClick={() => router.push('/')}
-          variant="link"
-          leftIcon={<Icon as={AiOutlineArrowLeft} />}
-        >
-          Вернуться
-        </Button>
-        <RegisterForm />
-      </Box>
-    </Flex>
+      <RegisterForm />
+    </Container>
   );
-};
+}
