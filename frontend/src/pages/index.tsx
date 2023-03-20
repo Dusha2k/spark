@@ -1,4 +1,4 @@
-import { ButtonLink } from '@/components';
+import { ButtonLink } from '@/shared/ui';
 import { Flex, Link, Button, Text, Container } from '@chakra-ui/react';
 import NextLink from 'next/link';
 

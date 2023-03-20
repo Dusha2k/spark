@@ -1,4 +1,4 @@
-import { useNProgress } from '@/configs';
+import { useNProgress } from '@/shared/configs';
 import '@/styles/globals.css';
 import { ChakraProvider, theme } from '@chakra-ui/react';
 import type { AppProps } from 'next/app';
