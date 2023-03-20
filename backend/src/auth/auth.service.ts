@@ -39,11 +39,13 @@ export class AuthService {
   }
 
   async login(email: string) {
-    const payload = email;
     return {
-      access_token: this.jwtService.sign(payload, {
-        secret: process.env.JWT_SECRET,
-      }),
+      access_token: this.jwtService.sign(
+        { email },
+        {
+          secret: process.env.JWT_SECRET,
+        },
+      ),
     };
   }
 }

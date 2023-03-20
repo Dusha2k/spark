@@ -7,3 +7,8 @@ export class LoginDto {
   @IsString({ message: 'Не должно быть пустым' })
   password: string;
 }
+
+export class LoginUserResponseDto {
+  email: string;
+  login: string;
+}

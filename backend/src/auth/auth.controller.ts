@@ -10,7 +10,7 @@ import { SkipAuth } from 'src/decorators/skipAuth.decorator';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login.dto';
+import { LoginDto, LoginUserResponseDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 
 @ApiTags('auth')
@@ -37,7 +37,7 @@ export class AuthController {
   @SkipAuth()
   @HttpCode(200)
   @Post('login')
-  @ApiCreatedResponse({ type: OmitType(UserEntity, ['password']) })
+  @ApiCreatedResponse({ type: LoginUserResponseDto })
   async login(@Body() dto: LoginDto) {
     const { email } = await this.authService.validateUser(
       dto.email,
