@@ -11,11 +11,16 @@ import {
   InputGroup,
   Text,
 } from '@chakra-ui/react';
-import { registerSchema } from '../helpers/schemas';
+import { registerSchema } from '../lib/schemas';
 import { AuthCard } from '../components/AuthCard';
+import { useMutation } from '@tanstack/react-query';
+import { AuthService, RegisterDto } from '@/shared/openapi';
 
 type FormData = yup.InferType<typeof registerSchema>;
 export const RegisterForm = () => {
+  const { mutate, isLoading } = useMutation((data: RegisterDto) =>
+    AuthService.authControllerRegister(data),
+  );
   const {
     register,
     handleSubmit,
@@ -23,7 +28,8 @@ export const RegisterForm = () => {
   } = useForm<FormData>({
     resolver: yupResolver(registerSchema),
   });
-  const onSubmit = (data: FormData) => console.log(data);
+  const onSubmit = ({ passwordConfirmation, ...data }: FormData) =>
+    mutate(data);
 
   return (
     <AuthCard title="Зарегистрироваться">
@@ -62,7 +68,13 @@ export const RegisterForm = () => {
           </FormHelperText>
         </FormControl>
         <Flex justifyContent="flex-end">
-          <Button type="submit" marginTop={2} alignSelf="end">
+          <Button
+            isLoading={isLoading}
+            type="submit"
+            onClick={() => console.log('clck')}
+            marginTop={2}
+            alignSelf="end"
+          >
             Регистрация
           </Button>
         </Flex>
