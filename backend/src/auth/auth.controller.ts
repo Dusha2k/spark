@@ -2,6 +2,7 @@ import {
   Body,
   ConflictException,
   Controller,
+  Get,
   HttpCode,
   Post,
 } from '@nestjs/common';
@@ -44,5 +45,10 @@ export class AuthController {
       dto.password,
     );
     return this.authService.login(email);
+  }
+
+  @Get('profile')
+  async getProfile() {
+    return 'hello';
   }
 }
