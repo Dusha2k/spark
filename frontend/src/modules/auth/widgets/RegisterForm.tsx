@@ -1,6 +1,5 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import {
   Button,
   Flex,
@@ -8,27 +7,22 @@ import {
   FormHelperText,
   FormLabel,
   Input,
-  InputGroup,
-  Text,
 } from '@chakra-ui/react';
-import { registerSchema } from '../lib/schemas';
+import { FormRegisterData, registerSchema } from '../lib/schemas';
+import { usePostRegister } from '../hooks/usePostRegister';
 import { AuthCard } from '../components/AuthCard';
-import { useMutation } from '@tanstack/react-query';
-import { AuthService, RegisterDto } from '@/shared/openapi';
 
-type FormData = yup.InferType<typeof registerSchema>;
 export const RegisterForm = () => {
-  const { mutate, isLoading } = useMutation((data: RegisterDto) =>
-    AuthService.authControllerRegister(data),
-  );
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
+    reset
+  } = useForm<FormRegisterData>({
     resolver: yupResolver(registerSchema),
   });
-  const onSubmit = ({ passwordConfirmation, ...data }: FormData) =>
+  const { mutate, isLoading } = usePostRegister(reset);
+  const onSubmit = ({ passwordConfirmation, ...data }: FormRegisterData) =>
     mutate(data);
 
   return (

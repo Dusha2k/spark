@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 
+export type FormLoginData = yup.InferType<typeof loginSchema>;
 export const loginSchema = yup.object().shape({
   email: yup.string().required('Это поле обязательное'),
   password: yup
@@ -8,6 +9,7 @@ export const loginSchema = yup.object().shape({
     .required('Это поле обязательное'),
 });
 
+export type FormRegisterData = yup.InferType<typeof registerSchema>;
 export const registerSchema = yup.object().shape({
   login: yup.string().required('Это поле обязательное'),
   email: yup

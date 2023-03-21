@@ -16,7 +16,7 @@ import { ToastContainer } from '@/shared/lib/toast';
 export default function App({ Component, pageProps, router }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
   useNProgress(router);
-  useSetSettingsOpenApi();
+  useSetSettingsOpenApi(router);
 
   return (
     <ChakraProvider theme={theme}>
