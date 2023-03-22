@@ -1,24 +1,23 @@
-import { errorToast } from '@/shared/lib/toast';
-import { AuthService } from '@/shared/openapi';
-import { useMutation } from '@tanstack/react-query';
-import { ApiError } from 'next/dist/server/api-utils';
-import { useRouter } from 'next/router';
-import { FormLoginData } from '../lib/schemas';
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { FormLoginData } from "../lib/schemas";
+import { authAPI } from "../../../shared/api";
+import { errorToast } from "../../../shared/toast";
 
 export const usePostLogin = () => {
-  const router = useRouter();
+  const navigate = useNavigate();
   return useMutation(
-    (data: FormLoginData) => AuthService.authControllerLogin(data),
+    (data: FormLoginData) => authAPI.authControllerLogin(data),
     {
-      onSuccess: (data: { access_token: string }) => {
-        localStorage.setItem('token', data.access_token);
-        router.push('/app');
+      onSuccess: ({ data }) => {
+        localStorage.setItem("token", data.token);
+        navigate("/app");
       },
-      onError: (error: ApiError) => {
+      onError: () => {
         errorToast({
-          description: 'Не правильный логин или пароль',
+          description: "Не правильный логин или пароль",
         });
       },
-    },
+    }
   );
 };
