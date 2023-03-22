@@ -9,3 +9,9 @@ export class RegisterDto {
   @IsString({ message: 'Не должно быть пустым' })
   password: string;
 }
+
+export class ResponseRegisterDto {
+  email: string;
+  login: string;
+  id: number;
+}

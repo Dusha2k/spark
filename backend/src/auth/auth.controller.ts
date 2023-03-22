@@ -6,13 +6,12 @@ import {
   HttpCode,
   Post,
 } from '@nestjs/common';
-import { ApiCreatedResponse, ApiTags, OmitType } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiResponse, ApiTags, OmitType } from '@nestjs/swagger';
 import { SkipAuth } from 'src/decorators/skipAuth.decorator';
-import { UserEntity } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
-import { LoginDto, LoginUserResponseDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
+import { LoginDto, ResponseLoginDto } from './dto/login.dto';
+import { RegisterDto, ResponseRegisterDto } from './dto/register.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -24,7 +23,7 @@ export class AuthController {
 
   @SkipAuth()
   @Post('register')
-  @ApiCreatedResponse({ type: OmitType(UserEntity, ['password']) })
+  @ApiCreatedResponse({ type: ResponseRegisterDto })
   async register(@Body() dto: RegisterDto) {
     const existedUser = await this.usersService.findOne(dto.email);
     if (existedUser) {
@@ -36,15 +35,17 @@ export class AuthController {
   }
 
   @SkipAuth()
-  @HttpCode(200)
   @Post('login')
-  @ApiCreatedResponse({ type: LoginUserResponseDto })
+  @HttpCode(200)
+  @ApiResponse({ type: ResponseLoginDto, status: 200 })
   async login(@Body() dto: LoginDto) {
-    const { email } = await this.authService.validateUser(
-      dto.email,
-      dto.password,
-    );
-    return this.authService.login(email);
+    const data = await this.authService.validateUser(dto.email, dto.password);
+    const token = await this.authService.login(data.email);
+
+    return {
+      ...data,
+      token,
+    };
   }
 
   @Get('profile')

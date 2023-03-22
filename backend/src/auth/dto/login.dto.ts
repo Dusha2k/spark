@@ -8,7 +8,9 @@ export class LoginDto {
   password: string;
 }
 
-export class LoginUserResponseDto {
-  email: string;
+export class ResponseLoginDto {
+  token: string;
+  id: number;
   login: string;
+  email: string;
 }

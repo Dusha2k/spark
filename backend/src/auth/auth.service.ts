@@ -39,13 +39,11 @@ export class AuthService {
   }
 
   async login(email: string) {
-    return {
-      access_token: this.jwtService.sign(
-        { email },
-        {
-          secret: process.env.JWT_SECRET,
-        },
-      ),
-    };
+    return this.jwtService.sign(
+      { email },
+      {
+        secret: process.env.JWT_SECRET,
+      },
+    );
   }
 }
