@@ -5,12 +5,12 @@ import {
   Input,
   FormHelperText,
   Button,
-} from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
-import { FormLoginData, loginSchema } from "../lib/schemas";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { AuthCard } from "../components/AuthCard";
-import { usePostLogin } from "../hooks/usePostLogin";
+} from '@chakra-ui/react';
+import { useForm } from 'react-hook-form';
+import { FormLoginData, loginSchema } from '../lib/schemas';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { AuthCard } from '../components/AuthCard';
+import { usePostLogin } from '../hooks/usePostLogin';
 
 export const LoginForm = () => {
   const { mutate, isLoading } = usePostLogin();
@@ -21,13 +21,13 @@ export const LoginForm = () => {
   } = useForm<FormLoginData>({
     resolver: yupResolver(loginSchema),
   });
-  const onSubmit = async (data: FormLoginData) => mutate(data);
+  const onSubmit = (data: FormLoginData) => mutate(data);
   return (
     <AuthCard title="Вход">
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormControl isRequired isInvalid={!!errors.email?.message}>
           <FormLabel>Введите свой email</FormLabel>
-          <Input placeholder="Введите email" {...register("email")} />
+          <Input placeholder="Введите email" {...register('email')} />
           <FormHelperText>{errors.email?.message}</FormHelperText>
         </FormControl>
         <FormControl isRequired isInvalid={!!errors.password?.message}>
@@ -35,7 +35,7 @@ export const LoginForm = () => {
           <Input
             type="password"
             placeholder="Введите пароль"
-            {...register("password")}
+            {...register('password')}
           />
           <FormHelperText>{errors.password?.message}</FormHelperText>
         </FormControl>
