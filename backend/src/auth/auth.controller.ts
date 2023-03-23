@@ -5,13 +5,23 @@ import {
   Get,
   HttpCode,
   Post,
+  Req,
+  Request,
+  Res,
 } from '@nestjs/common';
-import { ApiCreatedResponse, ApiResponse, ApiTags, OmitType } from '@nestjs/swagger';
+import { Response } from 'express';
+import {
+  ApiCreatedResponse,
+  ApiResponse,
+  ApiTags,
+  OmitType,
+} from '@nestjs/swagger';
 import { SkipAuth } from 'src/decorators/skipAuth.decorator';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
 import { LoginDto, ResponseLoginDto } from './dto/login.dto';
 import { RegisterDto, ResponseRegisterDto } from './dto/register.dto';
+import { CurrentUser, User } from 'src/decorators/user.decorator';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -38,10 +48,18 @@ export class AuthController {
   @Post('login')
   @HttpCode(200)
   @ApiResponse({ type: ResponseLoginDto, status: 200 })
-  async login(@Body() dto: LoginDto) {
+  async login(
+    @Body() dto: LoginDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     const data = await this.authService.validateUser(dto.email, dto.password);
-    const token = await this.authService.login(data.email);
-
+    const token = await this.authService.login(data.email, data.id);
+    res.cookie('access_token', token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      expires: new Date(Date.now() + 1 * 24 * 240 * 1000),
+    });
     return {
       ...data,
       token,

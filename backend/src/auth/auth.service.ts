@@ -38,9 +38,9 @@ export class AuthService {
     return data;
   }
 
-  async login(email: string) {
+  async login(email: string, id: number) {
     return this.jwtService.sign(
-      { email },
+      { email, id },
       {
         secret: process.env.JWT_SECRET,
       },

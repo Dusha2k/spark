@@ -1,19 +1,32 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
-import { LoginDto } from '../dto/login.dto';
+import { Request } from 'express';
+import { UserEntity } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        JwtStrategy.extractJWTFromCookie,
+      ]),
       ignoreExpiration: false,
       secretOrKey: process.env.JWT_SECRET,
     });
   }
 
-  async validate({ email }: Pick<LoginDto, 'email'>) {
-    return email;
+  private static extractJWTFromCookie(req: Request): string | null {
+    if (req.cookies && req.cookies.access_token) {
+      return req.cookies.access_token;
+    }
+    return null;
+  }
+
+  async validate({ email, id }: Pick<UserEntity, 'email' | 'id'>) {
+    return {
+      email: email,
+      id,
+    };
   }
 }
