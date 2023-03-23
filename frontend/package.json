@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "gen": "openapi -i http://localhost:7777/swagger-json -o src/shared/openapi"
+    "generate": "npx openapi-generator-cli generate -i http://localhost:7777/swagger-json -g typescript-axios -o src/shared/api/openAPI --api-name-suffix Client"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.5.2",
@@ -19,6 +19,7 @@
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
     "axios": "^1.3.4",
+    "cookies-next": "^2.1.1",
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",
     "framer-motion": "^10.6.0",
@@ -32,9 +33,8 @@
     "yup": "^1.0.2"
   },
   "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.5.2",
     "@types/nprogress": "^0.2.0",
-    "eslint-config-prettier": "^8.7.0",
-    "openapi-typescript": "^6.2.0",
-    "openapi-typescript-codegen": "^0.23.0"
+    "eslint-config-prettier": "^8.7.0"
   }
 }
