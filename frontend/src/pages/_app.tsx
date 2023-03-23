@@ -10,13 +10,11 @@ import {
   QueryClientProvider,
   Hydrate,
 } from '@tanstack/react-query';
-import { useSetSettingsOpenApi } from '@/shared/configs/openApi';
 import { ToastContainer } from '@/shared/lib/toast';
 
 export default function App({ Component, pageProps, router }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
   useNProgress(router);
-  useSetSettingsOpenApi(router);
 
   return (
     <ChakraProvider theme={theme}>

@@ -1,17 +1,19 @@
+import { authAPI } from '@/shared/api';
 import { errorToast } from '@/shared/lib/toast';
-import { AuthService } from '@/shared/openapi';
 import { useMutation } from '@tanstack/react-query';
+import { getCookies } from 'cookies-next';
 import { ApiError } from 'next/dist/server/api-utils';
+import { setCookie } from 'cookies-next';
 import { useRouter } from 'next/router';
 import { FormLoginData } from '../lib/schemas';
 
 export const usePostLogin = () => {
   const router = useRouter();
   return useMutation(
-    (data: FormLoginData) => AuthService.authControllerLogin(data),
+    (data: FormLoginData) => authAPI.authControllerLogin(data),
     {
-      onSuccess: (data: { access_token: string }) => {
-        localStorage.setItem('token', data.access_token);
+      onSuccess: ({ data }) => {
+        console.log(getCookies('access_token', {}));
         router.push('/app');
       },
       onError: (error: ApiError) => {
