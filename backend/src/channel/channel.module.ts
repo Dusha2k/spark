@@ -3,10 +3,12 @@ import { ChannelService } from './channel.service';
 import { ChannelController } from './channel.controller';
 import { ChannelEntity } from './entities/channel.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ChannelGateway } from './channel.gateway';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ChannelEntity])],
+  imports: [AuthModule, TypeOrmModule.forFeature([ChannelEntity])],
   controllers: [ChannelController],
-  providers: [ChannelService],
+  providers: [ChannelGateway, ChannelService],
 })
 export class ChannelModule {}
