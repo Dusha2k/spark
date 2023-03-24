@@ -10,6 +10,7 @@ import { RegisterDto } from './dto/register.dto';
 import { UserService } from '../user/user.service';
 import { genSalt, hash, compare } from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
+import { TokenPayload } from './interfaces/tokenPayload.interface';
 
 @Injectable()
 export class AuthService {
@@ -45,5 +46,14 @@ export class AuthService {
         secret: process.env.JWT_SECRET,
       },
     );
+  }
+
+  async getUserFromAuthToken(token: string) {
+    const payload: TokenPayload = this.jwtService.verify(token, {
+      secret: process.env.JWT_SECRET,
+    });
+    if (payload?.email) {
+      return this.usersService.findOne(payload.email);
+    }
   }
 }
