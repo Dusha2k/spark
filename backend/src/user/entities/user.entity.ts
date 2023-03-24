@@ -16,7 +16,7 @@ export class UserEntity {
   login: string;
   @Column()
   email: string;
-  @Column()
+  @Column({ default: null })
   avatar: string;
   @Column()
   password: string;
