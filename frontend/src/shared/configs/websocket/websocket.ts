@@ -1,7 +1,10 @@
 import { io } from 'socket.io-client';
 import { parse } from 'cookie';
 
-export const socket = io('ws://localhost:7777', { withCredentials: true });
+export const socket = io('ws://localhost:7777', {
+  withCredentials: true,
+  transports: ['websocket'],
+});
 
 // socket.io.on('open', () => {
 //   console.log('IM')
