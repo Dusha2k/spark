@@ -21,7 +21,7 @@ import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
 import { LoginDto, ResponseLoginDto } from './dto/login.dto';
 import { RegisterDto, ResponseRegisterDto } from './dto/register.dto';
-import { CurrentUser, User } from 'src/decorators/user.decorator';
+import { GetCurrentUser, CurrentUser } from 'src/decorators/user.decorator';
 
 @ApiTags('auth')
 @Controller('auth')
