@@ -1,3 +1,4 @@
+import { axiosInstance } from '@/shared/api';
 import { ButtonLink } from '@/shared/components';
 import { Flex, Link, Button, Text, Container } from '@chakra-ui/react';
 import NextLink from 'next/link';

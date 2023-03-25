@@ -1,13 +1,33 @@
-import axios from 'axios';
-import { AuthClient, Configuration } from './openAPI';
+import axios, { AxiosInstance } from 'axios';
+import { io } from 'socket.io-client';
+import {
+  AuthClient,
+  ChannelClient,
+  Configuration,
+  MessageClient,
+  UserClient,
+} from './openAPI';
+
+export const socket = io('http://localhost:7777', {
+  withCredentials: true,
+  transports: ['websocket'],
+});
 
 const config = new Configuration();
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-export const authAPI = new AuthClient(
+const defaultSettings: [Configuration, string, AxiosInstance] = [
   config,
-  process.env.NEXT_PUBLIC_HOST,
+  process.env.NEXT_PUBLIC_HOST as string,
   axiosInstance,
-);
+];
+
+export const authAPI = new AuthClient(...defaultSettings);
+
+export const channelAPI = new ChannelClient(...defaultSettings);
+
+export const messageAPI = new MessageClient(...defaultSettings);
+
+export const userAPI = new UserClient(...defaultSettings);
