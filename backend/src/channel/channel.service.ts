@@ -32,7 +32,7 @@ export class ChannelService {
   async getUserFromSocket(socket: Socket) {
     const cookie = socket.handshake.headers.cookie;
     if (!cookie) {
-      return null
+      return null;
     }
     const { access_token } = parse(cookie);
     const user = await this.authService.getUserFromAuthToken(access_token);

@@ -11,7 +11,7 @@ import { Server, Socket } from 'socket.io';
 import { AuthService } from 'src/auth/auth.service';
 import { ChannelService } from './channel.service';
 
-@WebSocketGateway({ cors: '*:*' })
+@WebSocketGateway()
 export class ChannelGateway implements OnGatewayConnection {
   constructor(private readonly channelService: ChannelService) {}
 
