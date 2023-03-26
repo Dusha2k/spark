@@ -22,14 +22,14 @@ export class MessageController {
     return this.messageService.create(createMessageDto);
   }
 
+  @Get(':id')
+  findByChannelId(@Param('id') id: string) {
+    return this.messageService.findByChannelId(+id);
+  }
+
   @Get()
   findAll() {
     return this.messageService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.messageService.findOne(+id);
   }
 
   @Patch(':id')
