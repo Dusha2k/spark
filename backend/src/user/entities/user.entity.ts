@@ -6,6 +6,7 @@ import {
   Column,
   OneToMany,
   ManyToMany,
+  JoinTable,
 } from 'typeorm';
 
 @Entity('users')
@@ -21,7 +22,8 @@ export class UserEntity {
   @Column()
   password: string;
   @OneToMany(() => MessageEntity, (message) => message.owner)
-  messages: MessageEntity;
+  messages: MessageEntity[];
   @ManyToMany(() => ChannelEntity, (channel) => channel.members)
-  channels: ChannelEntity;
+  @JoinTable()
+  channels: ChannelEntity[];
 }

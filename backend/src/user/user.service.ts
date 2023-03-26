@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
 
 @Injectable()
@@ -10,11 +10,31 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
   findOne(email: string) {
-    return this.userRepository.findOne({
-      where: {
-        email,
-      },
-    });
+    return this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.channels', 'channel')
+      .leftJoinAndSelect('channel.members', 'member')
+      .where('user.email = :email', { email })
+      .getOne();
+  }
+
+  findByIds(usersIds: string[]) {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.channels', 'channel')
+      .where('user.id IN (:...usersIds)', { usersIds })
+      .getMany();
+  }
+
+  findAll() {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.channels', 'channel')
+      .getMany();
+  }
+
+  updateUser(user: UserEntity) {
+    return this.userRepository.save(user);
   }
 
   createUser(email: string, login: string, password: string) {

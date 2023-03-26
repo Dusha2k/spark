@@ -8,8 +8,13 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get()
+  @Get('/')
   async getCurrent(@GetCurrentUser() user: CurrentUser) {
     return await this.userService.findOne(user.email);
+  }
+
+  @Get('/all')
+  async getAllUsers() {
+    return await this.userService.findAll();
   }
 }
