@@ -1,4 +1,5 @@
 import {
+  ConnectedSocket,
   MessageBody,
   OnGatewayConnection,
   SubscribeMessage,
@@ -23,7 +24,10 @@ export class ChannelGateway implements OnGatewayConnection {
   }
 
   @SubscribeMessage('send_message')
-  listenForMessages(@MessageBody() data: string) {
+  listenForMessages(
+    @MessageBody() data: string,
+    @ConnectedSocket() socket: Socket,
+  ) {
     console.log('here');
     //this.server.sockets.emit('receive_message', data);
   }

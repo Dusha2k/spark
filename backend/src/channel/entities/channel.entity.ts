@@ -3,7 +3,6 @@ import { UserEntity } from 'src/user/entities/user.entity';
 import {
   Column,
   Entity,
-  JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -13,15 +12,16 @@ import {
 export class ChannelEntity {
   @PrimaryGeneratedColumn()
   id: number;
-  @Column()
+  @Column({ nullable: true })
   name: string;
-  @Column()
+  @Column({ nullable: true })
   description: string;
-  @Column()
+  @Column({ nullable: true })
   avatar: string;
   @ManyToMany(() => UserEntity, (user) => user.channels)
-  @JoinTable()
-  members: UserEntity;
-  @OneToMany(() => MessageEntity, (message) => message.channel)
-  messages: MessageEntity;
+  members: UserEntity[];
+  @OneToMany(() => MessageEntity, (message) => message.channel, {
+    cascade: true,
+  })
+  messages: MessageEntity[];
 }
