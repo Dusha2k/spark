@@ -1,2 +1,3 @@
-export { ButtonLink } from './button';
-export { Avatar } from './avatar';
+export * from './button';
+export * from './avatar';
+export * from './image';

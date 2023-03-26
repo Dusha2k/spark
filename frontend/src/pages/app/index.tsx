@@ -1,12 +1,17 @@
-import { socket } from '@/shared/configs/websocket/websocket';
-import { Button, Flex } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { Channels } from '@/modules/channels';
+import { UsersList } from '@/modules/usersList';
+import { Flex, Text } from '@chakra-ui/react';
 
 export default function App() {
-  useEffect(() => {
-    socket.on('send_message', (headers) => {
-      console.log('lol')
-    })
-  }, [])
-  return <Flex><Button onClick={() => socket.emit('send_message')}/></Flex>;
+  return (
+    <Flex>
+      <Channels />
+      <Flex direction="column" alignItems="center">
+        <Text cursor="pointer" fontSize="3xl">
+          @ME
+        </Text>
+        <UsersList />
+      </Flex>
+    </Flex>
+  );
 }
