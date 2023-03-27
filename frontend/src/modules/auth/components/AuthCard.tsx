@@ -1,5 +1,4 @@
 import { Flex, Button, Icon, Box, Text } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
 
 interface Props {
@@ -8,7 +7,6 @@ interface Props {
 }
 
 export const AuthCard = ({ children, title }: Props) => {
-  const router = useRouter();
   return (
     <Flex
       width="100%"
@@ -17,11 +15,7 @@ export const AuthCard = ({ children, title }: Props) => {
       alignItems="center"
     >
       <Box boxShadow="2xl" p="10" rounded="md" width="100%">
-        <Button
-          onClick={() => router.push('/')}
-          variant="link"
-          leftIcon={<Icon as={AiOutlineArrowLeft} />}
-        >
+        <Button variant="link" leftIcon={<Icon as={AiOutlineArrowLeft} />}>
           Вернуться
         </Button>
         <Flex direction="column">

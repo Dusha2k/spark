@@ -2,7 +2,7 @@ import { Channels } from '@/modules/channels';
 import { UsersList } from '@/modules/usersList';
 import { Flex, Text } from '@chakra-ui/react';
 
-export default function App() {
+export const Main = () => {
   return (
     <Flex>
       <Channels />
@@ -14,4 +14,4 @@ export default function App() {
       </Flex>
     </Flex>
   );
-}
+};

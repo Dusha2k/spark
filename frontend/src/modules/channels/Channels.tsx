@@ -1,9 +1,8 @@
 import { userAPI } from '@/shared/api';
-import { Image } from '@/shared/components';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
-import Link from 'next/link';
 import { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 
 export const Channels = () => {
   const { data, isLoading } = useQuery(['current-user'], () =>
@@ -15,17 +14,8 @@ export const Channels = () => {
       {!isLoading && (
         <Flex>
           {data?.data?.channels?.map((channel) => (
-            <Link href={`/app/${channel.id}`} key={channel.id}>
+            <Link to={`/app/${channel.id}`} key={channel.id}>
               <Flex>
-                <Image
-                  src="/discord-avatar.png"
-                  alt="avatar"
-                  width={40}
-                  height={40}
-                  w="40px"
-                  h="40px"
-                  rounded="full"
-                />
                 <Text>
                   {
                     channel.members.filter(

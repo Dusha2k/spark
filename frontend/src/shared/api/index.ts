@@ -20,7 +20,7 @@ export const axiosInstance = axios.create({
 
 const defaultSettings: [Configuration, string, AxiosInstance] = [
   config,
-  process.env.NEXT_PUBLIC_HOST as string,
+  import.meta.env.VITE_PUBLIC_HOST as string,
   axiosInstance,
 ];
 

@@ -1,5 +1,4 @@
 import { channelAPI, userAPI } from '@/shared/api';
-import { Image } from '@/shared/components';
 import {
   Flex,
   Text,
@@ -30,16 +29,6 @@ export const UsersList = () => {
             <Popover key={user.id}>
               <PopoverTrigger>
                 <Flex cursor="pointer" gap={3} alignItems="flex-start">
-                  <Image
-                    alt="avatar"
-                    src="/discord-avatar.png"
-                    //objectFit="contain"
-                    width={35}
-                    height={40}
-                    w="40px"
-                    h="40px"
-                    rounded="full"
-                  />
                   <Text>{user.login}</Text>
                 </Flex>
               </PopoverTrigger>

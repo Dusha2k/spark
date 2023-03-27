@@ -1,7 +1,7 @@
-import { LoginForm } from '@/modules/auth';
+import { RegisterForm } from '@/modules/auth';
 import { Container } from '@chakra-ui/react';
 
-export default function Login() {
+export const Register = () => {
   return (
     <Container
       display="flex"
@@ -11,7 +11,7 @@ export default function Login() {
       gap={2}
       height="100%"
     >
-      <LoginForm />
+      <RegisterForm />
     </Container>
   );
-}
+};
