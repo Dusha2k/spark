@@ -1,6 +1,6 @@
 import { authAPI } from '@/shared/api';
+import { RegisterDto } from '@/shared/api/openAPI';
 import { successToast } from '@/shared/lib/toast';
-import { RegisterDto } from '@/shared/openapi';
 import { useMutation } from '@tanstack/react-query';
 import { UseFormReset } from 'react-hook-form';
 import { FormRegisterData } from '../lib/schemas';

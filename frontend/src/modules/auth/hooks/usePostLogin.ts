@@ -13,7 +13,6 @@ export const usePostLogin = () => {
     (data: FormLoginData) => authAPI.authControllerLogin(data),
     {
       onSuccess: ({ data }) => {
-        console.log(getCookies('access_token', {}));
         router.push('/app');
       },
       onError: (error: ApiError) => {

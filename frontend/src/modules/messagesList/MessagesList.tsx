@@ -9,7 +9,7 @@ export const MessagesList = ({ channelId }: { channelId: number }) => {
 
   return (
     <Flex direction="column">
-      {!isLoading && data?.data?.length > 0 ? (
+      {!isLoading && data?.data && data?.data?.length > 0 ? (
         data?.data?.map((message) => (
           <Flex direction="column" key={message.id}>
             <Text>{message.owner.login}</Text>
