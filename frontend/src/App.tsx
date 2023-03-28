@@ -2,6 +2,7 @@ import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { InitLayout } from './layouts/InitLayout';
 import { Details, Homepage, Login, Main, Register } from './pages';
 import { theme } from './shared/configs';
 import { store } from './shared/configs/store';
@@ -17,13 +18,15 @@ function App() {
         <ToastContainer />
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Homepage />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/app" element={<Main />} />
-              <Route path="/app/:id" element={<Details />} />
-            </Routes>
+            <InitLayout>
+              <Routes>
+                <Route path="/" element={<Homepage />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/app" element={<Main />} />
+                <Route path="/app/:id" element={<Details />} />
+              </Routes>
+            </InitLayout>
           </BrowserRouter>
         </QueryClientProvider>
       </ChakraProvider>

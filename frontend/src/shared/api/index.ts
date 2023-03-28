@@ -11,6 +11,7 @@ import {
 export const socket = io('http://localhost:7777', {
   withCredentials: true,
   transports: ['websocket'],
+  autoConnect: false,
 });
 
 const config = new Configuration();

@@ -194,37 +194,6 @@ export interface RegisterDto {
 /**
  * 
  * @export
- * @interface ResponseLoginDto
- */
-export interface ResponseLoginDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof ResponseLoginDto
-     */
-    'token': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof ResponseLoginDto
-     */
-    'id': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResponseLoginDto
-     */
-    'login': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResponseLoginDto
-     */
-    'email': string;
-}
-/**
- * 
- * @export
  * @interface ResponseRegisterDto
  */
 export interface ResponseRegisterDto {
@@ -452,7 +421,7 @@ export const AuthClientFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async authControllerLogin(loginDto: LoginDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResponseLoginDto>> {
+        async authControllerLogin(loginDto: LoginDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserEntity>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerLogin(loginDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -490,7 +459,7 @@ export const AuthClientFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authControllerLogin(loginDto: LoginDto, options?: any): AxiosPromise<ResponseLoginDto> {
+        authControllerLogin(loginDto: LoginDto, options?: any): AxiosPromise<UserEntity> {
             return localVarFp.authControllerLogin(loginDto, options).then((request) => request(axios, basePath));
         },
         /**

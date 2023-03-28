@@ -1,7 +1,9 @@
-import { Container, Flex, Text } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Button, Container, Flex, Text } from '@chakra-ui/react';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const Homepage = () => {
+  const navigate = useNavigate();
+
   return (
     <Container
       display="flex"
@@ -13,8 +15,10 @@ export const Homepage = () => {
     >
       <Text fontSize="4xl">Здарова</Text>
       <Flex gap={2}>
-        <Link to="/login">Войти</Link>
-        <Link to="/register">Зарегистрироваться</Link>
+        <Button onClick={() => navigate('/login')}>Войти</Button>
+        <Button onClick={() => navigate('/register')}>
+          Зарегистрироваться
+        </Button>
       </Flex>
     </Container>
   );
