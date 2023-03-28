@@ -1,11 +1,20 @@
-import { messageAPI } from '@/shared/api';
-import { Flex, Text } from '@chakra-ui/react';
+import { messageAPI, socket } from '@/shared/api';
+import { Button, Flex, Input, Text } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 
 export const MessagesList = ({ channelId }: { channelId: number }) => {
+  const [value, setValue] = useState('');
   const { data, isLoading } = useQuery(['messages', channelId], () =>
     messageAPI.messageControllerFindByChannelId(channelId.toString()),
   );
+
+  useEffect(() => {
+    socket.on('receive_message', (data) => console.log(data));
+    return () => {
+      socket.off('receive_message');
+    };
+  }, []);
 
   return (
     <Flex direction="column">
@@ -19,6 +28,12 @@ export const MessagesList = ({ channelId }: { channelId: number }) => {
       ) : (
         <Text>Нихера нет</Text>
       )}
+      <Input value={value} onChange={(e) => setValue(e.target.value)} />
+      <Button
+        onClick={() => socket.emit('send_message', { channelId, text: value })}
+      >
+        Отправить сообщение
+      </Button>
     </Flex>
   );
 };
