@@ -10,6 +10,7 @@ import { MessageModule } from './message/message.module';
 import { ChannelModule } from './channel/channel.module';
 import { MessageEntity } from './message/entities/message.entity';
 import { ChannelEntity } from './channel/entities/channel.entity';
+import { GatewayModule } from './gateway/gateway.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ChannelEntity } from './channel/entities/channel.entity';
     UserModule,
     MessageModule,
     ChannelModule,
+    GatewayModule,
   ],
   controllers: [],
   providers: [

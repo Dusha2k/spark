@@ -35,8 +35,7 @@ export class AuthService {
       throw new UnauthorizedException('Не правильный логин или пароль');
     }
 
-    const { password, ...data } = user;
-    return data;
+    return user;
   }
 
   async login(email: string, id: number) {

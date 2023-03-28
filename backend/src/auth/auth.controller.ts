@@ -47,29 +47,26 @@ export class AuthController {
   @SkipAuth()
   @Post('login')
   @HttpCode(200)
-  @ApiResponse({ type: ResponseLoginDto, status: 200 })
   async login(
     @Body() dto: LoginDto,
     @Res({ passthrough: true }) res: Response,
   ) {
     const data = await this.authService.validateUser(dto.email, dto.password);
     const token = await this.authService.login(data.email, data.id);
-    res.setHeader(
-      'Set-Cookie',
-      `access_token=${token}; HttpOnly; Path=/; Max-Age=${new Date(
-        Date.now() + 1 * 24 * 240 * 1000,
-      )}`,
-    );
-    // res.cookie('access_token', token, {
-    //   httpOnly: true,
-    //   secure: false,
-    //   sameSite: 'lax',
-    //   expires: new Date(Date.now() + 1 * 24 * 240 * 1000),
-    // });
-    return {
-      ...data,
-      token,
-    };
+    // res.setHeader(
+    //   'Set-Cookie',
+    //   `access_token=${token}; Path=/; Max-Age=${new Date(
+    //     Date.now() + 1 * 24 * 240 * 1000,
+    //   )}`,
+    // );
+    res.cookie('access_token', token, {
+      httpOnly: false,
+      secure: false,
+      sameSite: 'lax',
+      expires: new Date(Date.now() + 1 * 24 * 240 * 1000),
+    });
+    
+    return data;
   }
 
   @Get('profile')
