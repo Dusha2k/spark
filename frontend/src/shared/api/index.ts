@@ -1,5 +1,7 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import { NavigateFunction } from 'react-router-dom';
 import { io } from 'socket.io-client';
+import { errorToast } from '../lib/toast';
 import {
   AuthClient,
   ChannelClient,
@@ -18,6 +20,21 @@ const config = new Configuration();
 export const axiosInstance = axios.create({
   withCredentials: true,
 });
+export const runAxiosInterceptors = (navigate: NavigateFunction) => {
+  axiosInstance.interceptors.response.use(
+    function (response: AxiosResponse) {
+      return response;
+    },
+    function (error: AxiosError) {
+      if (error?.response?.status === 401) {
+        navigate('/login');
+        errorToast({
+          description: 'Пожалуйста авторизуйтесь',
+        });
+      }
+    },
+  );
+};
 
 const defaultSettings: [Configuration, string, AxiosInstance] = [
   config,

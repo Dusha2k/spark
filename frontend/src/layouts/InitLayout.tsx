@@ -1,8 +1,9 @@
-import { socket, userAPI } from '@/shared/api';
+import { runAxiosInterceptors, socket, userAPI } from '@/shared/api';
 import { FullScreenLoader } from '@/shared/components';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks';
 import { addUser } from '@/shared/store/userSlice';
 import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useLocation, useMatch, useNavigate } from 'react-router-dom';
@@ -15,7 +16,6 @@ export const InitLayout = ({ children }: { children: JSX.Element }) => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [token] = useState(Cookies.get('access_token'));
 
   const { mutate: getUser, isLoading } = useMutation(
     () => userAPI.userControllerGetCurrent(),
@@ -27,30 +27,22 @@ export const InitLayout = ({ children }: { children: JSX.Element }) => {
           navigate('/app');
         }
       },
+      // onError({ response }: AxiosError) {
+      //   if (response?.status === 401) {
+      //     navigate('/');
+      //   }
+      // },
     },
   );
 
-  const initApp = () => {
-    if (openRoutes.includes(pathname)) {
-      // На открытом роуте с токен значит запрашиваем данные и потом редирект
-      if (token) {
-        getUser();
-      } else {
-        // Ждем пока пользователь авторизуется
-      }
-    } else {
-      // На закрытом роуте без токен - перенаправление
-      if (!token) {
-        navigate('/');
-        // На закрытом роуте с токен значит все ок запрашиваем данные и потом редирект
-      } else {
-        getUser();
-      }
-    }
-  };
-
   useEffect(() => {
-    initApp();
+    runAxiosInterceptors(navigate);
+
+    if (openRoutes.includes(pathname)) {
+      // Что-то сделать
+    } else {
+      getUser();
+    }
     setIsAuthCheck(true);
   }, []);
 

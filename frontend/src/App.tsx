@@ -1,5 +1,6 @@
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { InitLayout } from './layouts/InitLayout';
