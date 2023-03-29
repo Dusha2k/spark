@@ -13,7 +13,9 @@ export class UserService {
     return this.userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.channels', 'channel')
+      .leftJoinAndSelect('channel.messages', 'messages')
       .leftJoinAndSelect('channel.members', 'member')
+      .leftJoinAndSelect('messages.owner', 'owner')
       .where('user.email = :email', { email })
       .getOne();
   }

@@ -17,9 +17,9 @@ export class MessageService {
   ) {}
   async create({ channelId, ownerId, text }: CreateMessageDto) {
     const channel = await this.channelService.findById(channelId.toString());
+
+    // TODO: отрефакторить что бы был поиск просто по одному id
     const owner = await this.userService.findByIds([ownerId.toString()]);
-    console.log(channel);
-    console.log(owner[0]);
     return this.messageRepository.save({
       text,
       channel,

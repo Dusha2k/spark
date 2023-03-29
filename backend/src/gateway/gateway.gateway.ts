@@ -41,10 +41,13 @@ export class Gateway implements OnGatewayConnection {
   }
 
   @SubscribeMessage('send_message')
-  listenForMessages(
+  async listenForMessages(
     @MessageBody() data: CreateMessageDto,
     @ConnectedSocket() socket: Socket,
   ) {
-    this.server.to(`channel:${data.channelId}`).emit('receive_message', data);
+    const newMessage = await this.messageService.create(data);
+    this.server
+      .to(`channel:${data.channelId}`)
+      .emit('receive_message', newMessage);
   }
 }
