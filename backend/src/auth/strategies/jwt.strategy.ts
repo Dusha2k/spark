@@ -12,13 +12,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         JwtStrategy.extractJWTFromCookie,
       ]),
       ignoreExpiration: false,
-      secretOrKey: process.env.JWT_SECRET,
+      secretOrKey: process.env.ACCESS_SECRET,
     });
   }
 
   private static extractJWTFromCookie(req: Request): string | null {
-    if (req.cookies && req.cookies.access_token) {
-      return req.cookies.access_token;
+    if (req.cookies) {
+      if (req.cookies.access_token) {
+        return req.cookies.access_token;
+      }
     }
     return null;
   }

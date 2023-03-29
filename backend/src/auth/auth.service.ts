@@ -11,6 +11,9 @@ import { UserService } from '../user/user.service';
 import { genSalt, hash, compare } from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { TokenPayload } from './interfaces/tokenPayload.interface';
+import { UserEntity } from 'src/user/entities/user.entity';
+import { RefreshToken } from './entities/refresh-token.entity';
+import { sign, verify } from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
@@ -22,6 +25,15 @@ export class AuthService {
     const salt = await genSalt(10);
     const passwordHash = await hash(password, salt);
     return await this.usersService.createUser(email, login, passwordHash);
+  }
+
+  async getUserFromAuthToken(token: string) {
+    const payload: TokenPayload = this.jwtService.verify(token, {
+      secret: process.env.ACCESS_SECRET,
+    });
+    if (payload?.email) {
+      return this.usersService.findOne(payload.email);
+    }
   }
 
   async validateUser(email: string, pass: string) {
@@ -38,21 +50,29 @@ export class AuthService {
     return user;
   }
 
-  async login(email: string, id: number) {
-    return this.jwtService.sign(
-      { email, id },
-      {
-        secret: process.env.JWT_SECRET,
-      },
-    );
+  async login(
+    user: Pick<UserEntity, 'email' | 'id' | 'login'>,
+    values: { userAgent: string; ipAddress: string },
+  ) {
+    return this.newRefreshAndAccessToken(user, values);
   }
 
-  async getUserFromAuthToken(token: string) {
-    const payload: TokenPayload = this.jwtService.verify(token, {
-      secret: process.env.JWT_SECRET,
+  private async newRefreshAndAccessToken(
+    { email, id, login }: Pick<UserEntity, 'email' | 'id' | 'login'>,
+    values: { userAgent: string; ipAddress: string },
+  ) {
+    const refreshToken = new RefreshToken({
+      id,
+      email,
+      login,
+      ...values,
     });
-    if (payload?.email) {
-      return this.usersService.findOne(payload.email);
-    }
+
+    return {
+      refreshToken: refreshToken.sign(),
+      accessToken: sign({ email, id, login }, process.env.ACCESS_SECRET, {
+        expiresIn: '1h',
+      }),
+    };
   }
 }

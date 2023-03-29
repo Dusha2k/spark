@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   HttpCode,
+  Ip,
   Post,
   Req,
   Request,
@@ -48,25 +49,34 @@ export class AuthController {
   @Post('login')
   @HttpCode(200)
   async login(
+    @Req() request,
+    @Ip() ip: string,
     @Body() dto: LoginDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const data = await this.authService.validateUser(dto.email, dto.password);
-    const token = await this.authService.login(data.email, data.id);
-    // res.setHeader(
-    //   'Set-Cookie',
-    //   `access_token=${token}; Path=/; Max-Age=${new Date(
-    //     Date.now() + 1 * 24 * 240 * 1000,
-    //   )}`,
-    // );
-    res.cookie('access_token', token, {
+    const user = await this.authService.validateUser(dto.email, dto.password);
+    const { accessToken, refreshToken } = await this.authService.login(user, {
+      ipAddress: ip,
+      userAgent: request.headers['user-agent'],
+    });
+
+    // 1 час
+    res.cookie('access_token', accessToken, {
       httpOnly: false,
       secure: false,
       sameSite: 'lax',
-      expires: new Date(Date.now() + 1 * 24 * 240 * 1000),
+      expires: new Date(Date.now() + 1 * 60 * 60 * 1000),
     });
-    
-    return data;
+
+    // 7 дней
+    res.cookie('refresh_token', refreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    });
+
+    return user;
   }
 
   @Get('profile')
