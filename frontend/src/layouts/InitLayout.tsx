@@ -1,4 +1,4 @@
-import { runAxiosInterceptors, socket, userAPI } from '@/shared/api';
+import { authAPI, runAxiosInterceptors, socket, userAPI } from '@/shared/api';
 import { FullScreenLoader } from '@/shared/components';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks';
 import { addUser } from '@/shared/store/userSlice';
@@ -27,26 +27,29 @@ export const InitLayout = ({ children }: { children: JSX.Element }) => {
           navigate('/app');
         }
       },
-      // onError({ response }: AxiosError) {
-      //   if (response?.status === 401) {
-      //     navigate('/');
-      //   }
-      // },
+    },
+  );
+
+  const { mutate: checkToken, isLoading: isLoadingCheckToken } = useMutation(
+    () => authAPI.authControllerCheckRefreshToken(),
+    {
+      onSuccess(data) {
+        if (data) {
+          getUser();
+        } else {
+          navigate('/login');
+        }
+      },
     },
   );
 
   useEffect(() => {
     runAxiosInterceptors(navigate);
-
-    if (openRoutes.includes(pathname)) {
-      // Что-то сделать
-    } else {
-      getUser();
-    }
+    checkToken();
     setIsAuthCheck(true);
   }, []);
 
-  if (isLoading || !isAuthCheck) {
+  if (isLoading || !isAuthCheck || isLoadingCheckToken) {
     return <FullScreenLoader />;
   }
   return <>{children}</>;
