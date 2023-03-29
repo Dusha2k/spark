@@ -1,9 +1,9 @@
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { InitLayout } from './layouts/InitLayout';
+import { SocketsLayout } from './layouts/SocketsLayout';
 import { Details, Homepage, Login, Main, Register } from './pages';
 import { theme } from './shared/configs';
 import { store } from './shared/configs/store';
@@ -20,13 +20,15 @@ function App() {
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
             <InitLayout>
-              <Routes>
-                <Route path="/" element={<Homepage />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/app" element={<Main />} />
-                <Route path="/app/:id" element={<Details />} />
-              </Routes>
+              <SocketsLayout>
+                <Routes>
+                  <Route path="/" element={<Homepage />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/app" element={<Main />} />
+                  <Route path="/app/:id" element={<Details />} />
+                </Routes>
+              </SocketsLayout>
             </InitLayout>
           </BrowserRouter>
         </QueryClientProvider>
