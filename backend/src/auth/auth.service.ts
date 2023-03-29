@@ -14,6 +14,7 @@ import { TokenPayload } from './interfaces/tokenPayload.interface';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { RefreshToken } from './entities/refresh-token.entity';
 import { sign, verify } from 'jsonwebtoken';
+import { PayloadRefreshTokenDto } from './dto/payload-refresh-token.dto';
 
 @Injectable()
 export class AuthService {
@@ -74,5 +75,11 @@ export class AuthService {
         expiresIn: '1h',
       }),
     };
+  }
+
+  async checkRefreshToken(
+    refreshToken: string,
+  ): Promise<PayloadRefreshTokenDto | undefined> {
+    return compare(refreshToken, process.env.REFRESH_SECRET);
   }
 }

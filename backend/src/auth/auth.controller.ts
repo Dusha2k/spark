@@ -4,25 +4,19 @@ import {
   Controller,
   Get,
   HttpCode,
+  HttpStatus,
   Ip,
   Post,
   Req,
-  Request,
   Res,
 } from '@nestjs/common';
-import { Response } from 'express';
-import {
-  ApiCreatedResponse,
-  ApiResponse,
-  ApiTags,
-  OmitType,
-} from '@nestjs/swagger';
+import { Response, Request } from 'express';
+import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { SkipAuth } from 'src/decorators/skipAuth.decorator';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
-import { LoginDto, ResponseLoginDto } from './dto/login.dto';
+import { LoginDto } from './dto/login.dto';
 import { RegisterDto, ResponseRegisterDto } from './dto/register.dto';
-import { GetCurrentUser, CurrentUser } from 'src/decorators/user.decorator';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -79,8 +73,18 @@ export class AuthController {
     return user;
   }
 
-  @Get('profile')
-  async getProfile() {
-    return 'hello';
+  @SkipAuth()
+  @Get('check')
+  async checkRefreshToken(@Res() response: Response, @Req() request: Request) {
+    const refreshToken = request.cookies.refresh_token;
+    if (!refreshToken) {
+      return response.status(HttpStatus.FORBIDDEN).send();
+    }
+    const user = this.authService.checkRefreshToken(refreshToken);
+    if (user) {
+      response.status(HttpStatus.OK).send();
+    } else {
+      response.status(HttpStatus.FORBIDDEN).send();
+    }
   }
 }
