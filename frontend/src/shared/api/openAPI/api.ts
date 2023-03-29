@@ -302,8 +302,8 @@ export const AuthClientAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authControllerGetProfile: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/auth/profile`;
+        authControllerCheckRefreshToken: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/auth/check`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -411,8 +411,8 @@ export const AuthClientFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async authControllerGetProfile(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerGetProfile(options);
+        async authControllerCheckRefreshToken(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerCheckRefreshToken(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -450,8 +450,8 @@ export const AuthClientFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authControllerGetProfile(options?: any): AxiosPromise<string> {
-            return localVarFp.authControllerGetProfile(options).then((request) => request(axios, basePath));
+        authControllerCheckRefreshToken(options?: any): AxiosPromise<void> {
+            return localVarFp.authControllerCheckRefreshToken(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -487,8 +487,8 @@ export class AuthClient extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AuthClient
      */
-    public authControllerGetProfile(options?: AxiosRequestConfig) {
-        return AuthClientFp(this.configuration).authControllerGetProfile(options).then((request) => request(this.axios, this.basePath));
+    public authControllerCheckRefreshToken(options?: AxiosRequestConfig) {
+        return AuthClientFp(this.configuration).authControllerCheckRefreshToken(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

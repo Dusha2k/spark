@@ -31,8 +31,17 @@ export const userSlice = createSlice({
         isAuth: true,
       };
     },
+    addMessage(state, action: PayloadAction<MessageEntity>) {
+      console.log(action.payload)
+      const channelIndex = state.channels.findIndex(
+        (channel) => channel.id === action.payload.channel.id,
+      );
+      if (channelIndex !== -1) {
+        state.channels[channelIndex].messages.push(action.payload);
+      }
+    },
   },
 });
 
-export const { addUser } = userSlice.actions;
+export const { addUser, addMessage } = userSlice.actions;
 export default userSlice.reducer;
