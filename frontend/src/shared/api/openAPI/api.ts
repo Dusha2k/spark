@@ -276,7 +276,19 @@ export interface UserEntity {
      * @type {string}
      * @memberof UserEntity
      */
+    'status': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserEntity
+     */
     'password': string;
+    /**
+     * 
+     * @type {Array<UserEntity>}
+     * @memberof UserEntity
+     */
+    'friends': Array<UserEntity>;
     /**
      * 
      * @type {Array<MessageEntity>}
