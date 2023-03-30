@@ -1,6 +1,16 @@
+import { UserEntity } from '@/shared/api/openAPI';
 import { useAppSelector } from '@/shared/hooks';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
+
+const User = ({ user }: { user: UserEntity }) => {
+  return (
+    <Flex>
+      <Text>{user.login}</Text>
+      <Text>{user.status}</Text>
+    </Flex>
+  );
+};
 
 export const Channels = () => {
   const channels = useAppSelector(({ user }) => user.channels);
@@ -14,10 +24,11 @@ export const Channels = () => {
           <Link to={`/app/${channel.id}`} key={channel.id}>
             <Flex>
               <Text>
-                {
-                  channel.members.filter((member) => member.id !== userId)[0]
-                    .login
-                }
+                <User
+                  user={
+                    channel.members.filter((member) => member.id !== userId)[0]
+                  }
+                />
               </Text>
             </Flex>
           </Link>

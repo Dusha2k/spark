@@ -17,6 +17,7 @@ const initialState: InitialState = {
   login: '',
   email: '',
   messages: [],
+  // TODO: сделать channels в виде объекта что бы обращаться по ключу
   channels: [],
 };
 
@@ -32,7 +33,7 @@ export const userSlice = createSlice({
       };
     },
     addMessage(state, action: PayloadAction<MessageEntity>) {
-      console.log(action.payload)
+      console.log(action.payload);
       const channelIndex = state.channels.findIndex(
         (channel) => channel.id === action.payload.channel.id,
       );
@@ -40,8 +41,31 @@ export const userSlice = createSlice({
         state.channels[channelIndex].messages.push(action.payload);
       }
     },
+    changeUserStatusInChannel(
+      { channels },
+      action: PayloadAction<{
+        id: number;
+        channelId: number;
+        status: 'offline' | 'online';
+      }>,
+    ) {
+      const channelIndex = channels.findIndex(
+        (channel) => channel.id === action.payload.channelId,
+      );
+      if (channelIndex !== -1) {
+        const memberIndex = channels[channelIndex].members.findIndex(
+          (member) => member.id === action.payload.id,
+        );
+        if (memberIndex !== -1) {
+          console.log(action.payload.status);
+          channels[channelIndex].members[memberIndex].status =
+            action.payload.status;
+        }
+      }
+    },
   },
 });
 
-export const { addUser, addMessage } = userSlice.actions;
+export const { addUser, addMessage, changeUserStatusInChannel } =
+  userSlice.actions;
 export default userSlice.reducer;
