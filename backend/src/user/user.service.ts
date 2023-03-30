@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
+import { UserStatus } from './types/user-status.type';
 
 @Injectable()
 export class UserService {
@@ -45,5 +46,14 @@ export class UserService {
       login,
       password,
     });
+  }
+
+  changeUserStatus(userId: number, status: UserStatus) {
+    return this.userRepository
+      .createQueryBuilder()
+      .update(UserEntity)
+      .set({ status })
+      .where('id =  :id', { id: userId })
+      .execute();
   }
 }

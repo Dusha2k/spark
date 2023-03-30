@@ -19,8 +19,13 @@ export class UserEntity {
   email: string;
   @Column({ default: null })
   avatar: string;
+  @Column({ default: 'offline' })
+  status: string;
   @Column()
   password: string;
+  @ManyToMany((type) => UserEntity)
+  @JoinTable()
+  friends: UserEntity[];
   @OneToMany(() => MessageEntity, (message) => message.owner)
   messages: MessageEntity[];
   @ManyToMany(() => ChannelEntity, (channel) => channel.members)
