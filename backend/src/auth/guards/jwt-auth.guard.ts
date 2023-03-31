@@ -23,6 +23,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    console.log('YA V ZHOPE')
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
@@ -39,6 +40,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     try {
       const accessToken = request.cookies.access_token;
       if (accessToken) {
+        const isValid = await this.authService.checkAccessToken(accessToken);
+        if (!isValid) {
+          throw new UnauthorizedException('Кривой access токена');
+        }
         return this.activate(context);
       }
 
