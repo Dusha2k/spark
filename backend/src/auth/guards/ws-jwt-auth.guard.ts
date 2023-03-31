@@ -32,8 +32,7 @@ export class WSJwtAuthGuard extends AuthGuard('jwt') {
           throw new WsException('Кривой access токена');
         }
 
-        console.log(isValid);
-        client.join(`user:${isValid.id}`); // добавляем клиента в комнату, связанную с пользователем
+        // TODO: Переместить этот код на 62-64 строчку и нормально обработать его
         client.emit('new_tokens', 'lox');
         return this.activate(context);
       }
