@@ -3,6 +3,8 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import { UserEntity } from 'src/user/entities/user.entity';
+import { Socket } from 'socket.io';
+import { parse } from 'cookie';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -16,7 +18,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  private static extractJWTFromCookie(req: Request): string | null {
+  private static extractJWTFromCookie(req: Request | Socket): string | null {
+    if (req instanceof Socket) {
+      const cookie = parse(req.handshake.headers['cookie']);
+      if (cookie.access_token) {
+        return cookie.access_token;
+      }
+      return null;
+    }
     if (req.cookies) {
       if (req.cookies.access_token) {
         return req.cookies.access_token;
@@ -25,7 +34,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     return null;
   }
 
-  async validate({ email, id }: Pick<UserEntity, 'email' | 'id'>) {
+  async validate(lol: Pick<UserEntity, 'email' | 'id'>) {
+    console.log('lol',lol)
+    const { email, id} = lol
     return {
       email: email,
       id,

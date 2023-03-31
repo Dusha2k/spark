@@ -39,12 +39,25 @@ export class ChannelService {
     if (!cookie) {
       return null;
     }
-    const { access_token } = parse(cookie);
-    const user = await this.authService.getUserFromAuthToken(access_token);
-    if (!user) {
-      throw new WsException('Кривые данные');
+    const { access_token, refresh_token } = parse(cookie);
+    if (access_token) {
+      const user = await this.authService.getUserFromAccessAuthToken(
+        access_token,
+      );
+      if (!user) {
+        throw new WsException('Кривые данные');
+      }
+      return user;
     }
 
-    return user;
+    if (refresh_token) {
+      const user = await this.authService.getUserFromRefreshToken(
+        refresh_token,
+      );
+      if (!user) {
+        throw new WsException('Кривые данные');
+      }
+      return user;
+    }
   }
 }

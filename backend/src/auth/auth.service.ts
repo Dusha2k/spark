@@ -28,10 +28,17 @@ export class AuthService {
     return await this.usersService.createUser(email, login, passwordHash);
   }
 
-  async getUserFromAuthToken(token: string) {
+  async getUserFromAccessAuthToken(token: string) {
     const payload: TokenPayload = this.jwtService.verify(token, {
       secret: process.env.ACCESS_SECRET,
     });
+    if (payload?.email) {
+      return this.usersService.findOne(payload.email);
+    }
+  }
+
+  async getUserFromRefreshToken(token: string) {
+    const payload = await this.checkRefreshToken(token);
     if (payload?.email) {
       return this.usersService.findOne(payload.email);
     }
@@ -77,9 +84,14 @@ export class AuthService {
     };
   }
 
-  async checkRefreshToken(
-    refreshToken: string,
-  ): Promise<PayloadRefreshTokenDto | undefined> {
-    return compare(refreshToken, process.env.REFRESH_SECRET);
+  async checkAccessToken(accessToken: string) {
+    return verify(accessToken, process.env.ACCESS_SECRET);
+  }
+
+  async checkRefreshToken(refreshToken: string) {
+    return verify(
+      refreshToken,
+      process.env.REFRESH_SECRET,
+    ) as PayloadRefreshTokenDto;
   }
 }

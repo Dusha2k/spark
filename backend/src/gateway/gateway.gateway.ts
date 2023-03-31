@@ -1,3 +1,4 @@
+import { UseGuards } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -10,12 +11,13 @@ import {
 } from '@nestjs/websockets';
 import { parse } from 'cookie';
 import { Server, Socket } from 'socket.io';
-import { AuthService } from 'src/auth/auth.service';
+import { WSJwtAuthGuard } from 'src/auth/guards/ws-jwt-auth.guard';
 import { CreateMessageDto } from 'src/message/dto/create-message.dto';
 import { MessageService } from 'src/message/message.service';
 import { UserService } from 'src/user/user.service';
 import { ChannelService } from '../channel/channel.service';
 
+@UseGuards(WSJwtAuthGuard)
 @WebSocketGateway()
 export class Gateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
@@ -29,6 +31,9 @@ export class Gateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   async handleConnection(socket: Socket) {
     const user = await this.channelService.getUserFromSocket(socket);
+    if (!user) {
+      return null;
+    }
     // Войти в свою личную комнату для оповещения от кого-то по id пользователя
     // Юзкейс: человек создал с кем-то комнату зная его id нужно его оповестить об этом
     socket.join(`user:${user.id}`);
@@ -47,6 +52,10 @@ export class Gateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   async handleDisconnect(socket: Socket) {
     const user = await this.channelService.getUserFromSocket(socket);
+    if (!user) {
+      socket && socket.disconnect();
+      return;
+    }
     socket.leave(`user:${user.id}`);
     // Обновить статус пользователя
     await this.userService.changeUserStatus(user.id, 'offline');
