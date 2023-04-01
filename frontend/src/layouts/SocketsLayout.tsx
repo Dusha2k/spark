@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { socket } from '@/shared/api';
 import { useAppDispatch } from '@/shared/hooks';
 import {
@@ -9,9 +10,10 @@ import { useEffect } from 'react';
 export const SocketsLayout = ({ children }: { children: JSX.Element }) => {
   const dispatch = useAppDispatch();
 
+  // TODO: Проставить везде типы для data
   useEffect(() => {
     socket.on('receive_message', (data) => {
-      console.log(data)
+      console.log(data);
       dispatch(addMessage(data));
     });
     socket.on('user_connected', (data) => {
@@ -20,7 +22,21 @@ export const SocketsLayout = ({ children }: { children: JSX.Element }) => {
     socket.on('user_disconnected', (data) => {
       dispatch(changeUserStatusInChannel({ ...data, status: 'offline' }));
     });
-    socket.on('new_tokens', (data) => console.log('token', data))
+    socket.on('new_tokens', (data) => {
+      console.log(data)
+      Cookies.set('access_token', data?.accessToken, {
+        httpOnly: false,
+        secure: false,
+        sameSite: 'lax',
+        expires: new Date(Date.now() + 1 * 60 * 60 * 1000),
+      });
+      Cookies.set('refresh_token', data?.refreshToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      });
+    });
     return () => {
       socket.removeAllListeners('receive_message');
       socket.removeAllListeners('user_connected');
