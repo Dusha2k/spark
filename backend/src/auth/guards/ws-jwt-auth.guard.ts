@@ -19,12 +19,11 @@ export class WSJwtAuthGuard extends AuthGuard('jwt') {
 
   async canActivate(context: ExecutionContext) {
     const client: Socket = context.switchToWs().getClient();
-    const response = context.switchToWs().getData();
     const ipAddress = client.handshake.address;
     const userAgent = client.handshake.headers['user-agent'];
     const cookie = parse(client.handshake.headers['cookie']);
     try {
-      if (cookie?.access_token) {
+      if (cookie?.access_token && cookie?.access_token !== 'undefined') {
         const isValid = (await this.authService.checkAccessToken(
           cookie.access_token,
         )) as any;
@@ -32,8 +31,6 @@ export class WSJwtAuthGuard extends AuthGuard('jwt') {
           throw new WsException('Кривой access токена');
         }
 
-        // TODO: Переместить этот код на 62-64 строчку и нормально обработать его
-        client.emit('new_tokens', 'lox');
         return this.activate(context);
       }
 
@@ -55,13 +52,11 @@ export class WSJwtAuthGuard extends AuthGuard('jwt') {
           userAgent,
         },
       );
+      client.emit('new_tokens', { refreshToken, accessToken });
 
       client.handshake.headers[
         'cookie'
       ] = `access_token=${accessToken}; refresh_token=${refreshToken}`;
-      client
-        .to(`user:${payloadRefreshToken.id}`)
-        .emit('new_tokens', { refreshToken, accessToken });
 
       return this.activate(context);
     } catch (e) {

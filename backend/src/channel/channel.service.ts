@@ -40,14 +40,13 @@ export class ChannelService {
       return null;
     }
     const { access_token, refresh_token } = parse(cookie);
-    if (access_token) {
+    if (access_token && access_token !== 'undefined') {
       const user = await this.authService.getUserFromAccessAuthToken(
         access_token,
       );
-      if (!user) {
-        throw new WsException('Кривые данные');
+      if (user) {
+        return user;
       }
-      return user;
     }
 
     if (refresh_token) {
