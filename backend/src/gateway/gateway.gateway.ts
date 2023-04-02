@@ -37,6 +37,7 @@ export class Gateway implements OnGatewayConnection, OnGatewayDisconnect {
     // Войти в свою личную комнату для оповещения от кого-то по id пользователя
     // Юзкейс: человек создал с кем-то комнату зная его id нужно его оповестить об этом
     socket.join(`user:${user.id}`);
+    socket.emit('self_status', 'online');
     // Обновить статус пользователя
     await this.userService.changeUserStatus(user.id, 'online');
     // Оповещение всех каналов о том что пользователь зашел в сеть
@@ -54,6 +55,7 @@ export class Gateway implements OnGatewayConnection, OnGatewayDisconnect {
     const user = await this.channelService.getUserFromSocket(socket);
     if (!user) {
       socket && socket.disconnect();
+      await this.userService.changeUserStatus(user.id, 'offline');
       return;
     }
     socket.leave(`user:${user.id}`);

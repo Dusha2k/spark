@@ -1,14 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
 import { UserStatus } from './types/user-status.type';
+import { CreateLocalFileDto } from 'src/local-file/dto/create-local-file.dto';
+import { LocalFileService } from 'src/local-file/local-file.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    private readonly localFileService: LocalFileService,
   ) {}
   findOne(email: string) {
     return this.userRepository
@@ -40,10 +43,10 @@ export class UserService {
     return this.userRepository.save(user);
   }
 
-  createUser(email: string, login: string, password: string) {
+  createUser(email: string, nickname: string, password: string) {
     return this.userRepository.save({
       email,
-      login,
+      nickname,
       password,
     });
   }
@@ -55,5 +58,16 @@ export class UserService {
       .set({ status })
       .where('id =  :id', { id: userId })
       .execute();
+  }
+
+  async addAvatar(userId: number, fileData: CreateLocalFileDto) {
+    const avatar = await this.localFileService.create(fileData);
+    const user = await this.userRepository.findOneBy({ id: userId });
+    if (!user) {
+      throw new NotFoundException('Пользователь не найден');
+    }
+
+    user.avatarId = avatar.id;
+    return this.userRepository.save(user);
   }
 }
