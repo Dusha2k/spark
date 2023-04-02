@@ -11,7 +11,7 @@ export const loginSchema = yup.object().shape({
 
 export type FormRegisterData = yup.InferType<typeof registerSchema>;
 export const registerSchema = yup.object().shape({
-  login: yup.string().required('Это поле обязательное'),
+  nickname: yup.string().required('Это поле обязательное'),
   email: yup
     .string()
     .email('Введите правильный формат')

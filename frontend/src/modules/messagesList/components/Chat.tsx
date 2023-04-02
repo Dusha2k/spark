@@ -23,7 +23,7 @@ export const Chat = ({ messages }: Props) => {
       <Virtuoso
         style={{ flex: 1 }}
         initialTopMostItemIndex={messages.length - 1}
-        itemContent={(index, message) => (
+        itemContent={(_index, message) => (
           <Flex direction="column" key={message.id}>
             <Text>{message.owner.login}</Text>
             <Text>{message.text}</Text>

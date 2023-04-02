@@ -1,22 +1,30 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ChannelEntity, MessageEntity, UserEntity } from '../api/openAPI';
+import {
+  ChannelEntity,
+  LocalFileEntity,
+  MessageEntity,
+  UserEntity,
+} from '../api/openAPI';
+import { UserStatus } from '../types';
 
 interface InitialState {
   isAuth: boolean;
   id: number;
-  login: string;
+  nickname: string;
   email: string;
-  avatar?: string;
-  messages: MessageEntity[];
+  status: UserStatus;
+  avatarId?: number;
+  messages?: MessageEntity[];
   channels: ChannelEntity[];
 }
 
 const initialState: InitialState = {
   isAuth: false,
   id: 0,
-  login: '',
+  nickname: '',
   email: '',
   messages: [],
+  status: 'offline',
   // TODO: сделать channels в виде объекта что бы обращаться по ключу
   channels: [],
 };
@@ -26,14 +34,15 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     addUser: (state, action: PayloadAction<UserEntity>) => {
-      const { password, ...other } = action.payload;
+      const { password, channels, status, ...other } = action.payload;
       return {
         ...other,
+        status: status as UserStatus,
+        channels: channels ?? [],
         isAuth: true,
       };
     },
     addMessage(state, action: PayloadAction<MessageEntity>) {
-      console.log(action.payload);
       const channelIndex = state.channels.findIndex(
         (channel) => channel.id === action.payload.channel.id,
       );
@@ -57,15 +66,25 @@ export const userSlice = createSlice({
           (member) => member.id === action.payload.id,
         );
         if (memberIndex !== -1) {
-          console.log(action.payload.status);
           channels[channelIndex].members[memberIndex].status =
             action.payload.status;
         }
       }
     },
+    changeSelfStatus(state, action: PayloadAction<UserStatus>) {
+      state.status = action.payload;
+    },
+    updateUserAvatar(state, action: PayloadAction<number>) {
+      state.avatarId = action.payload;
+    },
   },
 });
 
-export const { addUser, addMessage, changeUserStatusInChannel } =
-  userSlice.actions;
+export const {
+  addUser,
+  addMessage,
+  changeUserStatusInChannel,
+  changeSelfStatus,
+  updateUserAvatar,
+} = userSlice.actions;
 export default userSlice.reducer;

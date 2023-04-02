@@ -3,6 +3,7 @@ import { socket } from '@/shared/api';
 import { useAppDispatch } from '@/shared/hooks';
 import {
   addMessage,
+  changeSelfStatus,
   changeUserStatusInChannel,
 } from '@/shared/store/userSlice';
 import { useEffect } from 'react';
@@ -13,7 +14,6 @@ export const SocketsLayout = ({ children }: { children: JSX.Element }) => {
   // TODO: Проставить везде типы для data
   useEffect(() => {
     socket.on('receive_message', (data) => {
-      console.log(data);
       dispatch(addMessage(data));
     });
     socket.on('user_connected', (data) => {
@@ -22,8 +22,8 @@ export const SocketsLayout = ({ children }: { children: JSX.Element }) => {
     socket.on('user_disconnected', (data) => {
       dispatch(changeUserStatusInChannel({ ...data, status: 'offline' }));
     });
+    socket.on('self_status', (data) => dispatch(changeSelfStatus(data)));
     socket.on('new_tokens', (data) => {
-      console.log(data)
       Cookies.set('access_token', data?.accessToken, {
         httpOnly: false,
         secure: false,

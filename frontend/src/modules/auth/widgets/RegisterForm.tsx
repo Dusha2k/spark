@@ -1,12 +1,15 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { AiOutlineInfoCircle } from 'react-icons/ai';
 import {
+  Box,
   Button,
   Flex,
   FormControl,
   FormHelperText,
   FormLabel,
   Input,
+  Tooltip,
 } from '@chakra-ui/react';
 import { FormRegisterData, registerSchema } from '../lib/schemas';
 import { usePostRegister } from '../hooks/usePostRegister';
@@ -17,7 +20,7 @@ export const RegisterForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm<FormRegisterData>({
     resolver: yupResolver(registerSchema),
   });
@@ -28,10 +31,19 @@ export const RegisterForm = () => {
   return (
     <AuthCard title="Зарегистрироваться">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormControl isRequired isInvalid={!!errors.login?.message}>
-          <FormLabel>Введите свой логин</FormLabel>
-          <Input placeholder="Введите логин" {...register('login')} />
-          <FormHelperText>{errors.login?.message}</FormHelperText>
+        <FormControl isRequired isInvalid={!!errors.nickname?.message}>
+          <Flex>
+            <FormLabel>Введите свой никнейм</FormLabel>
+            <Box marginTop={1}>
+              <Tooltip label="Никнейм можно будет менять сколько угодно.">
+                <span>
+                  <AiOutlineInfoCircle />
+                </span>
+              </Tooltip>
+            </Box>
+          </Flex>
+          <Input placeholder="Введите никнейм" {...register('nickname')} />
+          <FormHelperText>{errors.nickname?.message}</FormHelperText>
         </FormControl>
         <FormControl isRequired isInvalid={!!errors.email?.message}>
           <FormLabel>Введите свой email</FormLabel>
@@ -65,7 +77,6 @@ export const RegisterForm = () => {
           <Button
             isLoading={isLoading}
             type="submit"
-            onClick={() => console.log('clck')}
             marginTop={2}
             alignSelf="end"
           >

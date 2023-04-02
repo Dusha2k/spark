@@ -29,7 +29,7 @@ export const UsersList = () => {
             <Popover key={user.id}>
               <PopoverTrigger>
                 <Flex cursor="pointer" gap={3} alignItems="flex-start">
-                  <Text>{user.login}</Text>
+                  <Text>{user.nickname}</Text>
                 </Flex>
               </PopoverTrigger>
               <Portal>
