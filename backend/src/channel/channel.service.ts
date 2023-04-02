@@ -40,6 +40,7 @@ export class ChannelService {
       return null;
     }
     const { access_token, refresh_token } = parse(cookie);
+    console.log(access_token);
     if (access_token && access_token !== 'undefined') {
       const user = await this.authService.getUserFromAccessAuthToken(
         access_token,

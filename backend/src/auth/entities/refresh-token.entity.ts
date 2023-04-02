@@ -7,7 +7,7 @@ export class RefreshToken {
 
   id: number;
   email: string;
-  login: string;
+  nickname: string;
   userAgent: string;
   ipAddress: string;
 

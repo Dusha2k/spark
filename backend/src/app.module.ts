@@ -11,6 +11,10 @@ import { ChannelModule } from './channel/channel.module';
 import { MessageEntity } from './message/entities/message.entity';
 import { ChannelEntity } from './channel/entities/channel.entity';
 import { GatewayModule } from './gateway/gateway.module';
+import { LocalFileModule } from './local-file/local-file.module';
+import { LocalFileEntity } from './local-file/entities/local-file.entity';
+import { MulterModule } from '@nestjs/platform-express';
+import { memoryStorage } from 'multer';
 
 @Module({
   imports: [
@@ -22,14 +26,18 @@ import { GatewayModule } from './gateway/gateway.module';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: 'spark',
-      entities: [UserEntity, MessageEntity, ChannelEntity],
+      entities: [UserEntity, MessageEntity, ChannelEntity, LocalFileEntity],
       synchronize: true,
+    }),
+    MulterModule.register({
+      storage: memoryStorage(),
     }),
     AuthModule,
     UserModule,
     MessageModule,
     ChannelModule,
     GatewayModule,
+    LocalFileModule,
   ],
   controllers: [],
   providers: [

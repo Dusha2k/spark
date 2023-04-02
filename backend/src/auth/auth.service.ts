@@ -3,9 +3,6 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { UserService } from '../user/user.service';
 import { genSalt, hash, compare } from 'bcryptjs';
@@ -22,16 +19,14 @@ export class AuthService {
     private usersService: UserService,
     private jwtService: JwtService,
   ) {}
-  async register({ email, login, password }: RegisterDto) {
+  async register({ email, nickname, password }: RegisterDto) {
     const salt = await genSalt(10);
     const passwordHash = await hash(password, salt);
-    return await this.usersService.createUser(email, login, passwordHash);
+    return await this.usersService.createUser(email, nickname, passwordHash);
   }
 
   async getUserFromAccessAuthToken(token: string) {
-    const payload: TokenPayload = this.jwtService.verify(token, {
-      secret: process.env.ACCESS_SECRET,
-    });
+    const payload = verify(token, process.env.ACCESS_SECRET) as TokenPayload;
     if (payload?.email) {
       return this.usersService.findOne(payload.email);
     }
@@ -59,26 +54,26 @@ export class AuthService {
   }
 
   async login(
-    user: Pick<UserEntity, 'email' | 'id' | 'login'>,
+    user: Pick<UserEntity, 'email' | 'id' | 'nickname'>,
     values: { userAgent: string; ipAddress: string },
   ) {
     return this.newRefreshAndAccessToken(user, values);
   }
 
   private async newRefreshAndAccessToken(
-    { email, id, login }: Pick<UserEntity, 'email' | 'id' | 'login'>,
+    { email, id, nickname }: Pick<UserEntity, 'email' | 'id' | 'nickname'>,
     values: { userAgent: string; ipAddress: string },
   ) {
     const refreshToken = new RefreshToken({
       id,
       email,
-      login,
+      nickname,
       ...values,
     });
 
     return {
       refreshToken: refreshToken.sign(),
-      accessToken: sign({ email, id, login }, process.env.ACCESS_SECRET, {
+      accessToken: sign({ email, id, nickname }, process.env.ACCESS_SECRET, {
         expiresIn: '1h',
       }),
     };

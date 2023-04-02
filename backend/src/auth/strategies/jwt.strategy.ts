@@ -34,11 +34,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     return null;
   }
 
-  async validate(lol: Pick<UserEntity, 'email' | 'id'>) {
-    console.log('lol',lol)
-    const { email, id} = lol
+  async validate({ email, id }: Pick<UserEntity, 'email' | 'id'>) {
     return {
-      email: email,
+      email,
       id,
     };
   }

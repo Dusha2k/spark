@@ -4,7 +4,7 @@ export class RegisterDto {
   @IsEmail({}, { message: 'Введите валидный email' })
   email: string;
   @IsString()
-  login: string;
+  nickname: string;
   @MinLength(6, { message: 'Минимальное кол-во символов 6' })
   @IsString({ message: 'Не должно быть пустым' })
   password: string;
@@ -12,6 +12,6 @@ export class RegisterDto {
 
 export class ResponseRegisterDto {
   email: string;
-  login: string;
+  nickname: string;
   id: number;
 }

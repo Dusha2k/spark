@@ -1,7 +1,7 @@
 export class PayloadRefreshTokenDto {
   id: number;
   email: string;
-  login: string;
+  nickname: string;
   ipAddress: string;
   userAgent: string;
   iat: number;
