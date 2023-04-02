@@ -9,12 +9,13 @@ export const AutoResizeTextarea = forwardRef<
   return (
     <Textarea
       minH="unset"
-      overflow="hidden"
+      //overflow="hidden"
       w="100%"
       resize="none"
       transition="height none"
       ref={ref}
       minRows={1}
+      maxRows={3}
       as={ResizeTextarea}
       {...props}
     />

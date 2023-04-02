@@ -9,7 +9,7 @@ const defaultSettings: Pick<
   position: 'top-right',
   duration: 3000,
   isClosable: true,
-  variant: 'subtitle',
+  //variant: 'subtitle',
 };
 
 const errorToast = (options?: UseToastOptions) =>

@@ -6,6 +6,7 @@ import {
   AuthClient,
   ChannelClient,
   Configuration,
+  LocalFileClient,
   MessageClient,
   UserClient,
 } from './openAPI';
@@ -49,3 +50,5 @@ export const channelAPI = new ChannelClient(...defaultSettings);
 export const messageAPI = new MessageClient(...defaultSettings);
 
 export const userAPI = new UserClient(...defaultSettings);
+
+export const fileAPI = new LocalFileClient(...defaultSettings);

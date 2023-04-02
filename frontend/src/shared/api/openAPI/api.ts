@@ -82,6 +82,31 @@ export interface CreateChannelDto {
 /**
  * 
  * @export
+ * @interface CreateLocalFileDto
+ */
+export interface CreateLocalFileDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateLocalFileDto
+     */
+    'filename': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateLocalFileDto
+     */
+    'path': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateLocalFileDto
+     */
+    'mimetype': string;
+}
+/**
+ * 
+ * @export
  * @interface CreateMessageDto
  */
 export interface CreateMessageDto {
@@ -103,6 +128,37 @@ export interface CreateMessageDto {
      * @memberof CreateMessageDto
      */
     'text': string;
+}
+/**
+ * 
+ * @export
+ * @interface LocalFileEntity
+ */
+export interface LocalFileEntity {
+    /**
+     * 
+     * @type {number}
+     * @memberof LocalFileEntity
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof LocalFileEntity
+     */
+    'filename': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LocalFileEntity
+     */
+    'path': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LocalFileEntity
+     */
+    'mimetype': string;
 }
 /**
  * 
@@ -183,7 +239,7 @@ export interface RegisterDto {
      * @type {string}
      * @memberof RegisterDto
      */
-    'login': string;
+    'nickname': string;
     /**
      * 
      * @type {string}
@@ -208,7 +264,7 @@ export interface ResponseRegisterDto {
      * @type {string}
      * @memberof ResponseRegisterDto
      */
-    'login': string;
+    'nickname': string;
     /**
      * 
      * @type {number}
@@ -258,7 +314,7 @@ export interface UserEntity {
      * @type {string}
      * @memberof UserEntity
      */
-    'login': string;
+    'nickname': string;
     /**
      * 
      * @type {string}
@@ -267,10 +323,16 @@ export interface UserEntity {
     'email': string;
     /**
      * 
-     * @type {string}
+     * @type {LocalFileEntity}
      * @memberof UserEntity
      */
-    'avatar': string;
+    'avatar'?: LocalFileEntity;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserEntity
+     */
+    'avatarId'?: number;
     /**
      * 
      * @type {string}
@@ -288,19 +350,19 @@ export interface UserEntity {
      * @type {Array<UserEntity>}
      * @memberof UserEntity
      */
-    'friends': Array<UserEntity>;
+    'friends'?: Array<UserEntity>;
     /**
      * 
      * @type {Array<MessageEntity>}
      * @memberof UserEntity
      */
-    'messages': Array<MessageEntity>;
+    'messages'?: Array<MessageEntity>;
     /**
      * 
      * @type {Array<ChannelEntity>}
      * @memberof UserEntity
      */
-    'channels': Array<ChannelEntity>;
+    'channels'?: Array<ChannelEntity>;
 }
 
 /**
@@ -694,6 +756,172 @@ export class ChannelClient extends BaseAPI {
 
 
 /**
+ * LocalFileClient - axios parameter creator
+ * @export
+ */
+export const LocalFileClientAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateLocalFileDto} createLocalFileDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        localFileControllerCreate: async (createLocalFileDto: CreateLocalFileDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createLocalFileDto' is not null or undefined
+            assertParamExists('localFileControllerCreate', 'createLocalFileDto', createLocalFileDto)
+            const localVarPath = `/api/local-file`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createLocalFileDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        localFileControllerGetFileById: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('localFileControllerGetFileById', 'id', id)
+            const localVarPath = `/api/local-file/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * LocalFileClient - functional programming interface
+ * @export
+ */
+export const LocalFileClientFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = LocalFileClientAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateLocalFileDto} createLocalFileDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async localFileControllerCreate(createLocalFileDto: CreateLocalFileDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.localFileControllerCreate(createLocalFileDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async localFileControllerGetFileById(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.localFileControllerGetFileById(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * LocalFileClient - factory interface
+ * @export
+ */
+export const LocalFileClientFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = LocalFileClientFp(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateLocalFileDto} createLocalFileDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        localFileControllerCreate(createLocalFileDto: CreateLocalFileDto, options?: any): AxiosPromise<object> {
+            return localVarFp.localFileControllerCreate(createLocalFileDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        localFileControllerGetFileById(id: number, options?: any): AxiosPromise<void> {
+            return localVarFp.localFileControllerGetFileById(id, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * LocalFileClient - object-oriented interface
+ * @export
+ * @class LocalFileClient
+ * @extends {BaseAPI}
+ */
+export class LocalFileClient extends BaseAPI {
+    /**
+     * 
+     * @param {CreateLocalFileDto} createLocalFileDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LocalFileClient
+     */
+    public localFileControllerCreate(createLocalFileDto: CreateLocalFileDto, options?: AxiosRequestConfig) {
+        return LocalFileClientFp(this.configuration).localFileControllerCreate(createLocalFileDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LocalFileClient
+     */
+    public localFileControllerGetFileById(id: number, options?: AxiosRequestConfig) {
+        return LocalFileClientFp(this.configuration).localFileControllerGetFileById(id, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * MessageClient - axios parameter creator
  * @export
  */
@@ -1061,6 +1289,35 @@ export const UserClientAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        userControllerAddAvatar: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/user/avatar`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         userControllerGetAllUsers: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/user/all`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -1129,6 +1386,15 @@ export const UserClientFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        async userControllerAddAvatar(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerAddAvatar(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         async userControllerGetAllUsers(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<UserEntity>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerGetAllUsers(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
@@ -1157,6 +1423,14 @@ export const UserClientFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        userControllerAddAvatar(options?: any): AxiosPromise<void> {
+            return localVarFp.userControllerAddAvatar(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         userControllerGetAllUsers(options?: any): AxiosPromise<Array<UserEntity>> {
             return localVarFp.userControllerGetAllUsers(options).then((request) => request(axios, basePath));
         },
@@ -1178,6 +1452,16 @@ export const UserClientFactory = function (configuration?: Configuration, basePa
  * @extends {BaseAPI}
  */
 export class UserClient extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserClient
+     */
+    public userControllerAddAvatar(options?: AxiosRequestConfig) {
+        return UserClientFp(this.configuration).userControllerAddAvatar(options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {*} [options] Override http request option.
