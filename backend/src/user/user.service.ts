@@ -79,4 +79,13 @@ export class UserService {
     user.avatarId = avatar.id;
     return this.userRepository.save(user);
   }
+
+  async changeUserNickname(userId: number, nickname: string) {
+    const user = await this.userRepository.findOneBy({ id: userId });
+    if (!user) {
+      throw new NotFoundException('Пользователь не найден');
+    }
+    user.nickname = nickname;
+    return this.userRepository.save(user);
+  }
 }

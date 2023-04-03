@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   MaxFileSizeValidator,
@@ -12,6 +13,7 @@ import { CurrentUser, GetCurrentUser } from 'src/decorators/user.decorator';
 import { UserService } from './user.service';
 import { SharpPipe, SharpPipeResponse } from 'src/local-file/sharp.pipe';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { UpdateNicknameDto } from './dto/update-nickname.dto';
 
 @ApiTags('user')
 @Controller('user')
@@ -28,6 +30,14 @@ export class UserController {
   @Get('/all')
   async getAllUsers() {
     return await this.userService.findAll();
+  }
+
+  @Post('/nickname')
+  async changeUserNickname(
+    @GetCurrentUser() { id }: CurrentUser,
+    @Body() { nickname }: UpdateNicknameDto,
+  ) {
+    return await this.userService.changeUserNickname(id, nickname);
   }
 
   @Post('/avatar')
