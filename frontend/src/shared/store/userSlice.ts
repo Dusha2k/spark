@@ -77,6 +77,9 @@ export const userSlice = createSlice({
     updateUserAvatar(state, action: PayloadAction<number>) {
       state.avatarId = action.payload;
     },
+    updateUserNickname(state, action: PayloadAction<string>) {
+      state.nickname = action.payload;
+    },
   },
 });
 
@@ -86,5 +89,6 @@ export const {
   changeUserStatusInChannel,
   changeSelfStatus,
   updateUserAvatar,
+  updateUserNickname,
 } = userSlice.actions;
 export default userSlice.reducer;

@@ -300,6 +300,19 @@ export interface UpdateMessageDto {
 /**
  * 
  * @export
+ * @interface UpdateNicknameDto
+ */
+export interface UpdateNicknameDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateNicknameDto
+     */
+    'nickname': string;
+}
+/**
+ * 
+ * @export
  * @interface UserEntity
  */
 export interface UserEntity {
@@ -1315,6 +1328,41 @@ export const UserClientAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {UpdateNicknameDto} updateNicknameDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerChangeUserNickname: async (updateNicknameDto: UpdateNicknameDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateNicknameDto' is not null or undefined
+            assertParamExists('userControllerChangeUserNickname', 'updateNicknameDto', updateNicknameDto)
+            const localVarPath = `/api/user/nickname`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateNicknameDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1386,8 +1434,18 @@ export const UserClientFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userControllerAddAvatar(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async userControllerAddAvatar(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserEntity>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerAddAvatar(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {UpdateNicknameDto} updateNicknameDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userControllerChangeUserNickname(updateNicknameDto: UpdateNicknameDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserEntity>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerChangeUserNickname(updateNicknameDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1423,8 +1481,17 @@ export const UserClientFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userControllerAddAvatar(options?: any): AxiosPromise<void> {
+        userControllerAddAvatar(options?: any): AxiosPromise<UserEntity> {
             return localVarFp.userControllerAddAvatar(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {UpdateNicknameDto} updateNicknameDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerChangeUserNickname(updateNicknameDto: UpdateNicknameDto, options?: any): AxiosPromise<UserEntity> {
+            return localVarFp.userControllerChangeUserNickname(updateNicknameDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1460,6 +1527,17 @@ export class UserClient extends BaseAPI {
      */
     public userControllerAddAvatar(options?: AxiosRequestConfig) {
         return UserClientFp(this.configuration).userControllerAddAvatar(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {UpdateNicknameDto} updateNicknameDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserClient
+     */
+    public userControllerChangeUserNickname(updateNicknameDto: UpdateNicknameDto, options?: AxiosRequestConfig) {
+        return UserClientFp(this.configuration).userControllerChangeUserNickname(updateNicknameDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
