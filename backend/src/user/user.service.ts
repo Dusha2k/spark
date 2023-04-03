@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { Brackets, In, Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
 import { UserStatus } from './types/user-status.type';
 import { CreateLocalFileDto } from 'src/local-file/dto/create-local-file.dto';
@@ -13,14 +13,23 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>,
     private readonly localFileService: LocalFileService,
   ) {}
-  findOne(email: string) {
+  findOne(searchTerm: { email?: string; id?: number }) {
     return this.userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.channels', 'channel')
       .leftJoinAndSelect('channel.messages', 'messages')
       .leftJoinAndSelect('channel.members', 'member')
       .leftJoinAndSelect('messages.owner', 'owner')
-      .where('user.email = :email', { email })
+      .where(
+        new Brackets((qb) => {
+          if (searchTerm.id !== undefined) {
+            qb.orWhere('user.id = :id', { id: searchTerm.id });
+          }
+          if (searchTerm.email !== undefined) {
+            qb.orWhere('user.email = :email', { email: searchTerm.email });
+          }
+        }),
+      )
       .getOne();
   }
 

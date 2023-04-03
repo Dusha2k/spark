@@ -30,7 +30,9 @@ export class AuthController {
   @Post('register')
   @ApiCreatedResponse({ type: ResponseRegisterDto })
   async register(@Body() dto: RegisterDto) {
-    const existedUser = await this.usersService.findOne(dto.email);
+    const existedUser = await this.usersService.findOne({
+      email: dto.email,
+    });
     if (existedUser) {
       throw new ConflictException('Такой пользователь уже существует');
     }

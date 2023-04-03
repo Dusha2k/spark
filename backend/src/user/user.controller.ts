@@ -19,8 +19,10 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('/')
-  async getCurrent(@GetCurrentUser() user: CurrentUser) {
-    return await this.userService.findOne(user.email);
+  async getCurrent(@GetCurrentUser() { id }: CurrentUser) {
+    return await this.userService.findOne({
+      id,
+    });
   }
 
   @Get('/all')

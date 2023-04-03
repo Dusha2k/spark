@@ -28,19 +28,25 @@ export class AuthService {
   async getUserFromAccessAuthToken(token: string) {
     const payload = verify(token, process.env.ACCESS_SECRET) as TokenPayload;
     if (payload?.email) {
-      return this.usersService.findOne(payload.email);
+      return this.usersService.findOne({
+        id: parseInt(payload.id),
+      });
     }
   }
 
   async getUserFromRefreshToken(token: string) {
     const payload = await this.checkRefreshToken(token);
     if (payload?.email) {
-      return this.usersService.findOne(payload.email);
+      return this.usersService.findOne({
+        id: payload.id,
+      });
     }
   }
 
   async validateUser(email: string, pass: string) {
-    const user = await this.usersService.findOne(email);
+    const user = await this.usersService.findOne({
+      email,
+    });
     if (!user) {
       throw new NotFoundException('Пользователь не найден');
     }
