@@ -1,7 +1,6 @@
 import { socket } from '@/shared/api';
-import { AutoResizeTextarea } from '@/shared/components';
 import { useAppSelector } from '@/shared/hooks';
-import { Button, Flex, Input, Text, Textarea } from '@chakra-ui/react';
+import { Button, Flex, Text, Textarea } from '@mantine/core';
 import { useEffect, useRef, useState } from 'react';
 import { shallowEqual } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -27,10 +26,10 @@ export const MessagesList = ({ channelId }: { channelId: number }) => {
 
   return (
     <Flex
-      margin="0 auto"
-      width="50%"
-      height="100%"
-      justifyContent="flex-end"
+      m="0 auto"
+      w="50%"
+      h="100%"
+      justify="flex-end"
       gap={5}
       direction="column"
     >
@@ -39,11 +38,12 @@ export const MessagesList = ({ channelId }: { channelId: number }) => {
       ) : (
         <Text>Нихера нет</Text>
       )}
-      <AutoResizeTextarea
-        flexShrink={0}
+      <Textarea
         ref={inputRef}
-        resize="none"
+        autosize
         value={value}
+        maxRows={4}
+        sx={{ flexShrink: 0 }}
         onKeyDown={(e) => {
           if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -60,7 +60,7 @@ export const MessagesList = ({ channelId }: { channelId: number }) => {
         onChange={(e) => setValue(e.target.value)}
       />
       <Button
-        flexShrink={0}
+        sx={{ flexShrink: 0 }}
         onClick={() => {
           if (value.length > 0) {
             socket.emit('send_message', {

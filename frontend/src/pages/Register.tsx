@@ -1,17 +1,10 @@
 import { RegisterForm } from '@/modules/auth';
-import { Container } from '@chakra-ui/react';
+import { Flex } from '@mantine/core';
 
 export const Register = () => {
   return (
-    <Container
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      flexDirection="column"
-      gap={2}
-      height="100%"
-    >
+    <Flex justify="center" align="center" direction="column" gap={2} h="100%">
       <RegisterForm />
-    </Container>
+    </Flex>
   );
 };

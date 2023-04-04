@@ -1,16 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { AiOutlineInfoCircle } from 'react-icons/ai';
-import {
-  Box,
-  Button,
-  Flex,
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Input,
-  Tooltip,
-} from '@chakra-ui/react';
+import { Flex, Input, Button, TextInput } from '@mantine/core';
 import { FormRegisterData, registerSchema } from '../lib/schemas';
 import { usePostRegister } from '../hooks/usePostRegister';
 import { AuthCard } from '../components/AuthCard';
@@ -31,54 +21,46 @@ export const RegisterForm = () => {
   return (
     <AuthCard title="Зарегистрироваться">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormControl isRequired isInvalid={!!errors.nickname?.message}>
-          <Flex>
-            <FormLabel>Введите свой никнейм</FormLabel>
-            <Box marginTop={1}>
-              <Tooltip label="Никнейм можно будет менять сколько угодно.">
-                <span>
-                  <AiOutlineInfoCircle />
-                </span>
-              </Tooltip>
-            </Box>
-          </Flex>
-          <Input placeholder="Введите никнейм" {...register('nickname')} />
-          <FormHelperText>{errors.nickname?.message}</FormHelperText>
-        </FormControl>
-        <FormControl isRequired isInvalid={!!errors.email?.message}>
-          <FormLabel>Введите свой email</FormLabel>
-          <Input placeholder="Введите email" {...register('email')} />
-          <FormHelperText>{errors.email?.message}</FormHelperText>
-        </FormControl>
-        <FormControl isRequired isInvalid={!!errors.password?.message}>
-          <FormLabel>Введите свой пароль</FormLabel>
-          <Input
-            type="password"
-            placeholder="Введите пароль"
-            {...register('password')}
-          />
-          <FormHelperText>{errors.password?.message}</FormHelperText>
-        </FormControl>
-        <FormControl
-          isRequired
-          isInvalid={!!errors.passwordConfirmation?.message}
-        >
-          <FormLabel>Повторите свой пароль</FormLabel>
-          <Input
-            type="password"
-            placeholder="Повторите пароль"
-            {...register('passwordConfirmation')}
-          />
-          <FormHelperText>
-            {errors.passwordConfirmation?.message}
-          </FormHelperText>
-        </FormControl>
-        <Flex justifyContent="flex-end">
+        <TextInput
+          id="nickname"
+          placeholder="Введите никнейм"
+          error={errors.nickname?.message}
+          label="Введите свой никнейм"
+          required
+          {...register('nickname')}
+        />
+        <TextInput
+          id="email"
+          type="email"
+          placeholder="Введите email"
+          error={errors.email?.message}
+          label="Введите свой email"
+          required
+          {...register('email')}
+        />
+        <TextInput
+          id="password"
+          type="password"
+          placeholder="Введите пароль"
+          error={errors.password?.message}
+          label="Введите свой пароль"
+          required
+          {...register('password')}
+        />
+        <TextInput
+          id="passwordConfirmation"
+          type="password"
+          placeholder="Повторите пароль"
+          error={errors.passwordConfirmation?.message}
+          label="Повторите свой пароль"
+          required
+          {...register('passwordConfirmation')}
+        />
+        <Flex justify="flex-end">
           <Button
-            isLoading={isLoading}
+            loading={isLoading}
             type="submit"
-            marginTop={2}
-            alignSelf="end"
+            sx={{ marginTop: '2rem', alignSelf: 'end' }}
           >
             Регистрация
           </Button>

@@ -3,16 +3,7 @@ import { UserEntity } from '@/shared/api/openAPI';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks';
 import { updateUserAvatar, updateUserNickname } from '@/shared/store/userSlice';
 import { AiOutlineCheck, AiOutlineClose, AiOutlineEdit } from 'react-icons/ai';
-import {
-  Box,
-  Button,
-  Flex,
-  Icon,
-  Input,
-  InputGroup,
-  InputRightElement,
-  Spinner,
-} from '@chakra-ui/react';
+import { Box, Button, Flex, ActionIcon, Input, Loader } from '@mantine/core';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { useState } from 'react';
@@ -74,57 +65,50 @@ export const Profile = () => {
             }
           }}
         />
-        <Button isLoading={isLoading} onClick={sendImage} disabled={!file}>
+        <Button loading={isLoading} onClick={sendImage} disabled={!file}>
           Загрузить
         </Button>
       </Box>
       <Box>
-        <InputGroup>
-          <Input
-            defaultValue={nickname}
-            value={currentName}
-            onChange={(e) => setCurrentName(e.target.value)}
-            disabled={!isRedactName || isUpdatingNickname}
-            minLength={1}
-            maxLength={10}
-          />
-          {!isUpdatingNickname && (
-            <>
-              {isRedactName ? (
-                <InputRightElement gap={1} w="4rem">
-                  <Icon
-                    flex="1"
-                    cursor="pointer"
-                    onClick={() => setIsRedactName(false)}
-                    as={AiOutlineClose}
-                  />
-                  <Icon
-                    flex="1"
-                    cursor="pointer"
-                    onClick={() => {
-                      if (currentName && currentName?.length > 0) {
-                        updateName(currentName);
-                      }
-                    }}
-                    as={AiOutlineCheck}
-                  />
-                </InputRightElement>
-              ) : (
-                <InputRightElement
-                  cursor="pointer"
-                  onClick={() => setIsRedactName(true)}
-                >
-                  <Icon as={AiOutlineEdit} />
-                </InputRightElement>
-              )}
-            </>
-          )}
-          {isUpdatingNickname && (
-            <InputRightElement>
-              <Spinner />
-            </InputRightElement>
-          )}
-        </InputGroup>
+        <Input
+          rightSection={
+            isUpdatingNickname ? (
+              <Loader />
+            ) : (
+              <>
+                {isRedactName ? (
+                  <Flex>
+                    <ActionIcon
+                      onClick={() => setIsRedactName(false)}
+                      sx={{ cursor: 'pointer' }}
+                    >
+                      <AiOutlineClose />
+                    </ActionIcon>
+                    <ActionIcon
+                      onClick={() => setIsRedactName(true)}
+                      sx={{ cursor: 'pointer' }}
+                    >
+                      <AiOutlineCheck />
+                    </ActionIcon>
+                  </Flex>
+                ) : (
+                  <ActionIcon
+                    onClick={() => setIsRedactName(true)}
+                    sx={{ cursor: 'pointer' }}
+                  >
+                    <AiOutlineEdit />
+                  </ActionIcon>
+                )}
+              </>
+            )
+          }
+          defaultValue={nickname}
+          value={currentName}
+          onChange={(e) => setCurrentName(e.target.value)}
+          disabled={!isRedactName || isUpdatingNickname}
+          minLength={1}
+          maxLength={10}
+        />
       </Box>
     </Flex>
   );

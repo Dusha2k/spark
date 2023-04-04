@@ -1,13 +1,13 @@
 import { Channels } from '@/modules/channels';
 import { UsersList } from '@/modules/usersList';
-import { Flex, Text } from '@chakra-ui/react';
+import { Flex, Text } from '@mantine/core';
 
 export const Main = () => {
   return (
     <Flex>
       <Channels />
-      <Flex direction="column" alignItems="center">
-        <Text cursor="pointer" fontSize="3xl">
+      <Flex direction="column" align="center">
+        <Text sx={{ curesor: 'pointer' }} fz="xl">
           @ME
         </Text>
         <UsersList />

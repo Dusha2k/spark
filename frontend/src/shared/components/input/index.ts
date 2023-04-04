@@ -1,1 +1,0 @@
-export { AutoResizeTextarea } from './AutoResizeTextarea';

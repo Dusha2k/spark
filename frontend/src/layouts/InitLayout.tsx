@@ -2,6 +2,7 @@ import { authAPI, runAxiosInterceptors, socket, userAPI } from '@/shared/api';
 import { FullScreenLoader } from '@/shared/components';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks';
 import { addUser } from '@/shared/store/userSlice';
+import { Container } from '@mantine/core';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
@@ -52,5 +53,5 @@ export const InitLayout = ({ children }: { children: JSX.Element }) => {
   if (isLoading || !isAuthCheck || isLoadingCheckToken) {
     return <FullScreenLoader />;
   }
-  return <>{children}</>;
+  return <Container h="100%">{children}</Container>;
 };

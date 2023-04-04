@@ -1,11 +1,4 @@
-import {
-  Flex,
-  FormControl,
-  FormLabel,
-  Input,
-  FormHelperText,
-  Button,
-} from '@chakra-ui/react';
+import { Flex, Input, TextInput, Button } from '@mantine/core';
 import { useForm } from 'react-hook-form';
 import { FormLoginData, loginSchema } from '../lib/schemas';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -25,26 +18,28 @@ export const LoginForm = () => {
   return (
     <AuthCard title="Вход">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormControl isRequired isInvalid={!!errors.email?.message}>
-          <FormLabel>Введите свой email</FormLabel>
-          <Input placeholder="Введите email" {...register('email')} />
-          <FormHelperText>{errors.email?.message}</FormHelperText>
-        </FormControl>
-        <FormControl isRequired isInvalid={!!errors.password?.message}>
-          <FormLabel>Введите свой пароль</FormLabel>
-          <Input
-            type="password"
-            placeholder="Введите пароль"
-            {...register('password')}
-          />
-          <FormHelperText>{errors.password?.message}</FormHelperText>
-        </FormControl>
-        <Flex justifyContent="flex-end">
+        <TextInput
+          id="email"
+          required
+          error={errors.email?.message}
+          label="Введите свой email"
+          placeholder="Введите email"
+          {...register('email')}
+        />
+        <TextInput
+          id="password"
+          required
+          type="password"
+          error={errors.password?.message}
+          label="Введите свой пароль"
+          placeholder="Введите пароль"
+          {...register('password')}
+        />
+        <Flex justify="flex-end">
           <Button
-            isLoading={isLoading}
+            loading={isLoading}
             type="submit"
-            marginTop={2}
-            alignSelf="end"
+            sx={{ marginTop: '2rem', alignSelf: 'end' }}
           >
             Войти
           </Button>

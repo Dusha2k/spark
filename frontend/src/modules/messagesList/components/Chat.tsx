@@ -1,6 +1,6 @@
 import { MessageEntity } from '@/shared/api/openAPI';
-import { Text, Flex } from '@chakra-ui/react';
-import { useCallback, useMemo, useState } from 'react';
+import { Text, Flex } from '@mantine/core';
+import { useCallback } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 
 interface Props {
@@ -13,19 +13,13 @@ export const Chat = ({ messages }: Props) => {
   }, []);
 
   return (
-    <Flex
-      height="100%"
-      width="100%"
-      direction="column"
-      flex="1"
-      paddingTop="30px"
-    >
+    <Flex h="100%" w="100%" direction="column" pt="30px" sx={{ flex: '1' }}>
       <Virtuoso
         style={{ flex: 1 }}
         initialTopMostItemIndex={messages.length - 1}
         itemContent={(_index, message) => (
           <Flex direction="column" key={message.id}>
-            <Text>{message.owner.login}</Text>
+            <Text>{message.owner.nickname}</Text>
             <Text>{message.text}</Text>
           </Flex>
         )}

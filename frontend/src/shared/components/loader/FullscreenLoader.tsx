@@ -1,14 +1,13 @@
-import { Flex, Spinner } from '@chakra-ui/react';
+import { Flex, Loader } from '@mantine/core';
 
 export const FullScreenLoader = () => {
   return (
     <Flex
-      height="100vh"
-      width="100vw"
-      justifyContent="center"
-      alignItems="center"
+      justify="center"
+      align="center"
+      sx={{ height: '100vh', width: '100vw' }}
     >
-      <Spinner size="xl" />
+      <Loader color="cyan" size="xl" variant="bars" />
     </Flex>
   );
 };

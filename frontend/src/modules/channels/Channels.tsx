@@ -1,12 +1,12 @@
 import { UserEntity } from '@/shared/api/openAPI';
 import { useAppSelector } from '@/shared/hooks';
-import { Box, Flex, Text } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@mantine/core';
 import { Link } from 'react-router-dom';
 
 const User = ({ user }: { user: UserEntity }) => {
   return (
     <Flex>
-      <Text>{user.login}</Text>
+      <Text>{user.nickname}</Text>
       <Text>{user.status}</Text>
     </Flex>
   );
@@ -18,7 +18,7 @@ export const Channels = () => {
 
   return (
     <Box>
-      <Text fontSize="3xl">Каналы</Text>
+      <Text fz="xl">Каналы</Text>
       <Flex>
         {channels?.map((channel) => (
           <Link to={`/app/${channel.id}`} key={channel.id}>

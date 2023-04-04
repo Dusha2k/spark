@@ -1,9 +1,22 @@
-import { Avatar as ChakraAvatar, AvatarBadge } from '@chakra-ui/react';
+import { Avatar as MantineAvatar, Indicator } from '@mantine/core';
 
-export const Avatar = () => {
+interface Props {
+  isOnline?: boolean;
+  avatar?: string;
+  onClick?: () => void;
+}
+
+export const Avatar = ({ isOnline, avatar, onClick }: Props) => {
   return (
-    <ChakraAvatar>
-      <AvatarBadge boxSize="1.25em" bg="grey.500" />
-    </ChakraAvatar>
+    <Indicator
+      inline
+      size={16}
+      offset={7}
+      position="bottom-end"
+      color={isOnline ? 'green.6' : 'red.6'}
+      withBorder
+    >
+      <MantineAvatar onClick={() => onClick?.()} radius="xl" src={avatar} />
+    </Indicator>
   );
 };

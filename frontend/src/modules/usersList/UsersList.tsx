@@ -1,13 +1,5 @@
 import { channelAPI, userAPI } from '@/shared/api';
-import {
-  Flex,
-  Text,
-  Popover,
-  PopoverContent,
-  Portal,
-  PopoverTrigger,
-  PopoverBody,
-} from '@chakra-ui/react';
+import { Popover, Flex, Text, Box } from '@mantine/core';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 export const UsersList = () => {
@@ -22,23 +14,21 @@ export const UsersList = () => {
   );
 
   return (
-    <Flex padding="15px" gap={3} alignItems="flex-start" direction="column">
+    <Flex p="15px" gap={3} align="flex-start" direction="column">
       {!isLoading && (
         <>
           {data?.data?.map((user) => (
             <Popover key={user.id}>
-              <PopoverTrigger>
-                <Flex cursor="pointer" gap={3} alignItems="flex-start">
+              <Popover.Target>
+                <Flex gap={3} align="flex-start" sx={{ cursor: 'pointer' }}>
                   <Text>{user.nickname}</Text>
                 </Flex>
-              </PopoverTrigger>
-              <Portal>
-                <PopoverContent>
-                  <PopoverBody onClick={() => mutate(['14', '15'])}>
-                    Написать сообщение
-                  </PopoverBody>
-                </PopoverContent>
-              </Portal>
+              </Popover.Target>
+              <Popover.Dropdown>
+                <Box onClick={() => mutate(['14', '15'])}>
+                  Написать сообщение
+                </Box>
+              </Popover.Dropdown>
             </Popover>
           ))}
         </>

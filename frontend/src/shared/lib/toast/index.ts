@@ -1,29 +1,24 @@
-import { createStandaloneToast, UseToastOptions } from '@chakra-ui/toast';
-
-const { ToastContainer, toast } = createStandaloneToast();
+import { NotificationProps, notifications } from '@mantine/notifications';
 
 const defaultSettings: Pick<
-  UseToastOptions,
-  'position' | 'duration' | 'isClosable' | 'variant'
+  NotificationProps,
+  'withCloseButton' | 'autoClose' | 'message'
 > = {
-  position: 'top-right',
-  duration: 3000,
-  isClosable: true,
-  //variant: 'subtitle',
+  message: 'Без сообщения',
+  autoClose: 3000,
+  withCloseButton: true,
 };
 
-const errorToast = (options?: UseToastOptions) =>
-  toast({
-    status: 'error',
+const errorToast = (options?: NotificationProps) =>
+  notifications.show({
     ...defaultSettings,
     ...options,
   });
 
-const successToast = (options?: UseToastOptions) =>
-  toast({
-    status: 'success',
+const successToast = (options?: NotificationProps) =>
+  notifications.show({
     ...defaultSettings,
     ...options,
   });
 
-export { ToastContainer, successToast, errorToast };
+export { successToast, errorToast };
