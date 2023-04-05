@@ -25,12 +25,16 @@ export class AuthService {
     return await this.usersService.createUser(email, nickname, passwordHash);
   }
 
-  async getUserFromAccessAuthToken(token: string) {
-    const payload = verify(token, process.env.ACCESS_SECRET) as TokenPayload;
-    if (payload?.email) {
-      return this.usersService.findOne({
-        id: parseInt(payload.id),
-      });
+  async getUserFromAccessAuthToken(token: string, refreshToken: string) {
+    try {
+      const payload = verify(token, process.env.ACCESS_SECRET) as TokenPayload;
+      if (payload?.email) {
+        return this.usersService.findOne({
+          id: parseInt(payload.id),
+        });
+      }
+    } catch (error) {
+      await this.getUserFromRefreshToken(refreshToken);
     }
   }
 

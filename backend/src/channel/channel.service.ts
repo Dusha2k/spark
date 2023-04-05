@@ -44,6 +44,7 @@ export class ChannelService {
     if (access_token && access_token !== 'undefined') {
       const user = await this.authService.getUserFromAccessAuthToken(
         access_token,
+        refresh_token,
       );
       if (user) {
         return user;
