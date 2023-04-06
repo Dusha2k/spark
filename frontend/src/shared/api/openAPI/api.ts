@@ -26,6 +26,25 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError } from './base';
 /**
  * 
  * @export
+ * @interface ChangePasswordDto
+ */
+export interface ChangePasswordDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ChangePasswordDto
+     */
+    'password': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ChangePasswordDto
+     */
+    'oldPassword': string;
+}
+/**
+ * 
+ * @export
  * @interface ChannelEntity
  */
 export interface ChannelEntity {
@@ -386,6 +405,41 @@ export const AuthClientAxiosParamCreator = function (configuration?: Configurati
     return {
         /**
          * 
+         * @param {ChangePasswordDto} changePasswordDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authControllerChangePassword: async (changePasswordDto: ChangePasswordDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'changePasswordDto' is not null or undefined
+            assertParamExists('authControllerChangePassword', 'changePasswordDto', changePasswordDto)
+            const localVarPath = `/api/auth/change-password`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(changePasswordDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -495,6 +549,16 @@ export const AuthClientFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {ChangePasswordDto} changePasswordDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async authControllerChangePassword(changePasswordDto: ChangePasswordDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authControllerChangePassword(changePasswordDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -534,6 +598,15 @@ export const AuthClientFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * 
+         * @param {ChangePasswordDto} changePasswordDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authControllerChangePassword(changePasswordDto: ChangePasswordDto, options?: any): AxiosPromise<void> {
+            return localVarFp.authControllerChangePassword(changePasswordDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -568,6 +641,17 @@ export const AuthClientFactory = function (configuration?: Configuration, basePa
  * @extends {BaseAPI}
  */
 export class AuthClient extends BaseAPI {
+    /**
+     * 
+     * @param {ChangePasswordDto} changePasswordDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthClient
+     */
+    public authControllerChangePassword(changePasswordDto: ChangePasswordDto, options?: AxiosRequestConfig) {
+        return AuthClientFp(this.configuration).authControllerChangePassword(changePasswordDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {*} [options] Override http request option.
