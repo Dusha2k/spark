@@ -13,27 +13,39 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>,
     private readonly localFileService: LocalFileService,
   ) {}
-  findOne(searchTerm: { email?: string; id?: number }) {
-    return this.userRepository
-      .createQueryBuilder('user')
-      .leftJoinAndSelect('user.channels', 'channel')
-      .leftJoinAndSelect('channel.messages', 'messages')
-      .leftJoinAndSelect('channel.members', 'member')
-      .leftJoinAndSelect('messages.owner', 'owner')
-      .where(
-        new Brackets((qb) => {
-          if (searchTerm.id !== undefined) {
-            qb.orWhere('user.id = :id', { id: searchTerm.id });
-          }
-          if (searchTerm.email !== undefined) {
-            qb.orWhere('user.email = :email', { email: searchTerm.email });
-          }
-        }),
-      )
-      .getOne();
+  findOne(
+    searchTerm: { email?: string; id?: number },
+    withPassword = false,
+    withRelations = true,
+  ) {
+    return this.userRepository.findOne({
+      where:
+        searchTerm?.id !== undefined
+          ? {
+              id: searchTerm.id,
+            }
+          : { email: searchTerm.email },
+      relations: withRelations
+        ? [
+            'channels',
+            'friends',
+            'channels.members',
+            'channels.messages',
+            'channels.messages.owner',
+          ]
+        : [],
+      select: {
+        id: true,
+        nickname: true,
+        email: true,
+        avatarId: true,
+        status: true,
+        password: withPassword,
+      },
+    });
   }
 
-  findByIds(usersIds: string[]) {
+  findByIds(usersIds: number[]) {
     return this.userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.channels', 'channel')

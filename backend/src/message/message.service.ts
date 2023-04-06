@@ -18,12 +18,17 @@ export class MessageService {
   async create({ channelId, ownerId, text }: CreateMessageDto) {
     const channel = await this.channelService.findById(channelId.toString());
 
-    // TODO: отрефакторить что бы был поиск просто по одному id
-    const owner = await this.userService.findByIds([ownerId.toString()]);
+    const owner = await this.userService.findOne(
+      {
+        id: ownerId,
+      },
+      false,
+      false,
+    );
     return this.messageRepository.save({
       text,
       channel,
-      owner: owner[0],
+      owner: owner,
     });
   }
 

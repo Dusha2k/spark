@@ -1,6 +1,6 @@
-import { IsString } from 'class-validator';
+import { IsString, IsNumber } from 'class-validator';
 
 export class CreateChannelDto {
-  @IsString({ each: true })
-  members: string[];
+  @IsNumber({}, { each: true })
+  members: number[];
 }

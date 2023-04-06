@@ -40,8 +40,7 @@ export class AuthController {
       throw new ConflictException('Такой пользователь уже существует');
     }
 
-    const { password, ...data } = await this.authService.register(dto);
-    return data;
+    return await this.authService.register(dto);
   }
 
   @Post('change-password')

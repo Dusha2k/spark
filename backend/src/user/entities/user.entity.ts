@@ -27,7 +27,7 @@ export class UserEntity {
   avatarId?: number;
   @Column({ default: 'offline' })
   status: string;
-  @Column()
+  @Column({ select: false })
   password: string;
   @ManyToMany((type) => UserEntity, { nullable: true })
   @JoinTable()
