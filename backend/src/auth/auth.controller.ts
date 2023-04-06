@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Ip,
+  NotFoundException,
   Post,
   Req,
   Res,
@@ -17,6 +18,8 @@ import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto, ResponseRegisterDto } from './dto/register.dto';
+import { CurrentUser, GetCurrentUser } from 'src/decorators/user.decorator';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -39,6 +42,21 @@ export class AuthController {
 
     const { password, ...data } = await this.authService.register(dto);
     return data;
+  }
+
+  @Post('change-password')
+  @HttpCode(200)
+  async changePassword(
+    @Body() { oldPassword, password }: ChangePasswordDto,
+    @GetCurrentUser() { email }: CurrentUser,
+  ) {
+    const user = await this.authService.validateUser(email, oldPassword);
+    if (!user) {
+      throw new NotFoundException('Пользователь не найден');
+    }
+    const hashPassword = await this.authService.hashPassword(password);
+    user.password = hashPassword;
+    this.usersService.updateUser(user);
   }
 
   @SkipAuth()
@@ -80,13 +98,13 @@ export class AuthController {
   async checkRefreshToken(@Res() response: Response, @Req() request: Request) {
     const refreshToken = request.cookies.refresh_token;
     if (!refreshToken) {
-      return response.status(HttpStatus.FORBIDDEN).send();
+      return response.status(HttpStatus.UNAUTHORIZED).send();
     }
     const user = this.authService.checkRefreshToken(refreshToken);
     if (user) {
       response.status(HttpStatus.OK).send();
     } else {
-      response.status(HttpStatus.FORBIDDEN).send();
+      response.status(HttpStatus.UNAUTHORIZED).send();
     }
   }
 }

@@ -20,9 +20,13 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
   async register({ email, nickname, password }: RegisterDto) {
-    const salt = await genSalt(10);
-    const passwordHash = await hash(password, salt);
+    const passwordHash = await this.hashPassword(password);
     return await this.usersService.createUser(email, nickname, passwordHash);
+  }
+
+  async hashPassword(password: string): Promise<string> {
+    const salt = await genSalt(10);
+    return await hash(password, salt);
   }
 
   async getUserFromAccessAuthToken(token: string, refreshToken: string) {
@@ -57,7 +61,7 @@ export class AuthService {
 
     const isCorrectPassword = await compare(pass, user.password);
     if (!isCorrectPassword) {
-      throw new UnauthorizedException('Не правильный логин или пароль');
+      throw new NotFoundException('Не правильный логин или пароль');
     }
 
     return user;
