@@ -1,16 +1,27 @@
 import { channelAPI, userAPI } from '@/shared/api';
+import { useAppSelector } from '@/shared/hooks';
 import { Popover, Flex, Text, Box } from '@mantine/core';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { stat } from 'fs';
+import { useNavigate } from 'react-router-dom';
 
 export const UsersList = () => {
+  const currentUserId = useAppSelector((state) => state.user.id);
+  const navigate = useNavigate();
   const { data, isLoading } = useQuery(['users'], () =>
     userAPI.userControllerGetAllUsers(),
   );
 
-  const { mutate } = useMutation((members: string[]) =>
-    channelAPI.channelControllerCreate({
-      members,
-    }),
+  const { mutate } = useMutation(
+    (members: number[]) =>
+      channelAPI.channelControllerCreate({
+        members,
+      }),
+    {
+      onSuccess: ({ data }) => {
+        navigate(`/app/${data.id}`);
+      },
+    },
   );
 
   return (
@@ -25,7 +36,7 @@ export const UsersList = () => {
                 </Flex>
               </Popover.Target>
               <Popover.Dropdown>
-                <Box onClick={() => mutate(['14', '15'])}>
+                <Box onClick={() => mutate([currentUserId, user.id])}>
                   Написать сообщение
                 </Box>
               </Popover.Dropdown>

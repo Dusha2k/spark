@@ -93,10 +93,10 @@ export interface ChannelEntity {
 export interface CreateChannelDto {
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<number>}
      * @memberof CreateChannelDto
      */
-    'members': Array<string>;
+    'members': Array<number>;
 }
 /**
  * 
