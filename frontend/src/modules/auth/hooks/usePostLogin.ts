@@ -20,7 +20,7 @@ export const usePostLogin = () => {
       },
       onError: () => {
         errorToast({
-          description: 'Не правильный логин или пароль',
+          message: 'Не правильный логин или пароль',
         });
       },
     },

@@ -11,7 +11,7 @@ export const usePostRegister = (reset: UseFormReset<FormRegisterData>) => {
     {
       onSuccess: () => {
         successToast({
-          title: 'Вы успешно зарегистрировались',
+          message: 'Вы успешно зарегистрировались',
         });
         reset();
       },

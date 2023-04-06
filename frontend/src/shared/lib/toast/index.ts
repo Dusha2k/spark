@@ -12,12 +12,16 @@ const defaultSettings: Pick<
 const errorToast = (options?: NotificationProps) =>
   notifications.show({
     ...defaultSettings,
+    title: 'Ошибка!',
+    color: 'red',
     ...options,
   });
 
 const successToast = (options?: NotificationProps) =>
   notifications.show({
     ...defaultSettings,
+    title: 'Успех!',
+    color: 'teal',
     ...options,
   });
 

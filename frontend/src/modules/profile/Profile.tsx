@@ -1,4 +1,4 @@
-import { axiosInstance, userAPI } from '@/shared/api';
+import { authAPI, axiosInstance, userAPI } from '@/shared/api';
 import { UserEntity } from '@/shared/api/openAPI';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks';
 import { updateUserAvatar, updateUserNickname } from '@/shared/store/userSlice';
@@ -21,6 +21,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { PasswordInputWithPopover } from '@/shared/components/input/PasswordInputWithPopover';
 import { ChangePasswordData, changePasswordSchema } from './lib/schemas';
+import { errorToast, successToast } from '@/shared/lib/toast';
 
 export const Profile = () => {
   const [file, setFile] = useState<File | undefined>();
@@ -29,6 +30,7 @@ export const Profile = () => {
     register,
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -74,6 +76,27 @@ export const Profile = () => {
     },
   );
 
+  const { mutate: updatePassword, isLoading: isUpdatingPassword } = useMutation(
+    ({ oldPassword, password }: ChangePasswordData) =>
+      authAPI.authControllerChangePassword({
+        oldPassword: oldPassword,
+        password: password,
+      }),
+    {
+      onSuccess: () => {
+        reset();
+        successToast({
+          message: 'Пароль успешно сменен',
+        });
+      },
+      onError: () => {
+        errorToast({
+          message: 'Пароль не верный',
+        });
+      },
+    },
+  );
+
   const sendImage = () => {
     const data = new FormData();
     data.append('file', file as any);
@@ -81,7 +104,7 @@ export const Profile = () => {
   };
 
   const onSubmit = (values: ChangePasswordData) => {
-    console.log(values);
+    updatePassword(values);
   };
 
   return (
@@ -173,7 +196,12 @@ export const Profile = () => {
             error={errors.repeatPassword?.message}
             {...register('repeatPassword')}
           />
-          <Button ml="auto" mt="0.5rem" type="submit">
+          <Button
+            disabled={isUpdatingPassword}
+            ml="auto"
+            mt="0.5rem"
+            type="submit"
+          >
             Сменить
           </Button>
         </Flex>

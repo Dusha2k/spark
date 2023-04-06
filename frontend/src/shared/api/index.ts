@@ -29,9 +29,9 @@ export const runAxiosInterceptors = (navigate: NavigateFunction) => {
     function (error: AxiosError) {
       if (error?.response?.status === 401) {
         navigate('/login');
-        errorToast({
-          description: 'Пожалуйста авторизуйтесь',
-        });
+      }
+      if (error.response?.status && error.response?.status > 300) {
+        throw error;
       }
     },
   );
