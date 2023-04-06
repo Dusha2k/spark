@@ -57,6 +57,7 @@ export class AuthService {
         email,
       },
       true,
+      true,
     );
     if (!user) {
       throw new NotFoundException('Пользователь не найден');

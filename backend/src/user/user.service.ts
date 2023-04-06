@@ -15,8 +15,8 @@ export class UserService {
   ) {}
   findOne(
     searchTerm: { email?: string; id?: number },
-    withPassword = false,
     withRelations = true,
+    withPassword = false,
   ) {
     return this.userRepository.findOne({
       where:
